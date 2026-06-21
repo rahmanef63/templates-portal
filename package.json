@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "thumbs": "node scripts/build-thumbs.mjs"
+    "thumbs": "python3 scripts/build-thumbs.py"
   },
   "dependencies": {
     "next": "^16",
