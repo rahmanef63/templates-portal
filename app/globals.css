@@ -43,3 +43,10 @@ body {
     scroll-behavior: smooth;
   }
 }
+
+/* Visible keyboard focus — the UA outline is invisible on the near-black bg. */
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 3px;
+}

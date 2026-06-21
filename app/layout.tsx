@@ -35,6 +35,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen flex flex-col">
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground"
+        >
+          Skip to content
+        </a>
         <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
           <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
             <Link
@@ -61,7 +67,7 @@ export default function RootLayout({
           </nav>
         </header>
 
-        <main className="flex-1">{children}</main>
+        <main id="main" className="flex-1">{children}</main>
 
         <footer className="border-t border-border">
           <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
