@@ -2,6 +2,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { TEMPLATES } from "@/data/templates";
 
+// Mosaic tile spans (per template index) — packs the 7 tiles into a seamless,
+// gap-less wall: one 2×2 feature + wide bands fill a clean rectangle.
+// sm = 2-col, lg = 4-col, mobile = 1-col stack.
+const MOSAIC_SPANS = [
+  "sm:col-span-2 lg:col-span-2 lg:row-span-2",
+  "",
+  "",
+  "sm:col-span-2 lg:col-span-2",
+  "sm:col-span-2 lg:col-span-2",
+  "",
+  "",
+];
+
 export default function HomePage() {
   return (
     <div>
@@ -37,8 +50,8 @@ export default function HomePage() {
       </section>
 
       {/* Template gallery */}
-      <section id="gallery" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-        <div className="mb-10 flex flex-col gap-2">
+      <section id="gallery" className="py-16 sm:py-20">
+        <div className="mx-auto mb-10 flex max-w-6xl flex-col gap-2 px-4 sm:px-6">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Template gallery
           </h2>
@@ -48,17 +61,17 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-5">
-          {TEMPLATES.map((t) => (
+        <div className="grid auto-rows-[58vw] grid-cols-1 gap-0 sm:auto-rows-[30vw] sm:grid-cols-2 lg:auto-rows-[16vw] lg:grid-cols-4">
+          {TEMPLATES.map((t, i) => (
             <article
               key={t.slug}
-              className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-muted"
+              className={`group relative overflow-hidden bg-muted ${MOSAIC_SPANS[i] ?? ""}`}
             >
               <Image
                 src={t.thumb}
                 alt={`${t.title} preview`}
                 fill
-                sizes="(min-width: 1024px) 360px, 50vw"
+                sizes="(min-width: 640px) 50vw, 100vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
               />
 
