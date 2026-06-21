@@ -2,19 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { TEMPLATES } from "@/data/templates";
 
-// Mosaic tile spans (per template index) — packs the 7 tiles into a seamless,
-// gap-less wall: one 2×2 feature + wide bands fill a clean rectangle.
-// sm = 2-col, lg = 4-col, mobile = 1-col stack.
-const MOSAIC_SPANS = [
-  "sm:col-span-2 lg:col-span-2 lg:row-span-2",
-  "",
-  "",
-  "sm:col-span-2 lg:col-span-2",
-  "sm:col-span-2 lg:col-span-2",
-  "",
-  "",
-];
-
 export default function HomePage() {
   return (
     <div>
@@ -69,18 +56,19 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid auto-rows-[58vw] grid-cols-1 gap-0 sm:auto-rows-[30vw] sm:grid-cols-2 lg:auto-rows-[16vw] lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-0 sm:grid-cols-2">
           {TEMPLATES.map((t, i) => (
             <article
               key={t.slug}
-              className={`group relative overflow-hidden bg-muted ${MOSAIC_SPANS[i] ?? ""}`}
+              className={`group relative aspect-[40/21] overflow-hidden bg-muted ${i === 0 ? "sm:col-span-2" : ""}`}
             >
               <Image
                 src={t.thumb}
                 alt={`${t.title} preview`}
                 fill
-                sizes="(min-width: 640px) 50vw, 100vw"
-                className="object-cover object-left transition-transform duration-500 group-hover:scale-[1.03]"
+                priority={i === 0}
+                sizes={i === 0 ? "100vw" : "(min-width: 640px) 50vw, 100vw"}
+                className="object-cover transition-transform duration-500 motion-safe:group-hover:scale-[1.03]"
               />
 
               {/* Meta-image already shows title + features. Mobile (no hover):
@@ -105,7 +93,7 @@ export default function HomePage() {
               </div>
 
               {/* Desktop: light scrim + action buttons fade in on hover (image stays visible) */}
-              <div className="absolute inset-0 hidden items-end gap-2 bg-gradient-to-t from-black/70 via-black/15 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 lg:flex">
+              <div className="absolute inset-0 hidden items-end gap-2 bg-gradient-to-t from-black/70 via-black/15 to-transparent p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100 lg:flex">
                 <a
                   href={t.demo}
                   target="_blank"
