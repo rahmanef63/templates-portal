@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { TEMPLATES } from "@/data/templates";
 
 export default function HomePage() {
@@ -53,13 +54,15 @@ export default function HomePage() {
               key={t.slug}
               className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-shadow hover:shadow-md"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element -- thumbs are pre-sized local webp; <img> avoids next/image remote config for zero gain */}
-              <img
-                src={t.thumb}
-                alt={`${t.title} preview`}
-                loading="lazy"
-                className="aspect-video w-full border-b border-border object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-              />
+              <div className="relative aspect-video w-full overflow-hidden border-b border-border">
+                <Image
+                  src={t.thumb}
+                  alt={`${t.title} preview`}
+                  fill
+                  sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                />
+              </div>
               <div className="flex flex-1 flex-col p-6">
                 <h3 className="text-lg font-semibold tracking-tight">{t.title}</h3>
                 <p className="mt-1 text-sm text-muted-foreground">{t.vertical}</p>
