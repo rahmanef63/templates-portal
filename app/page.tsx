@@ -1,56 +1,5 @@
 import Link from "next/link";
-
-type Template = {
-  name: string;
-  vertical: string;
-  demo: string;
-  repo: string;
-};
-
-const TEMPLATES: Template[] = [
-  {
-    name: "Personal Brand OS",
-    vertical: "Personal brand / portfolio",
-    demo: "https://personal-brand-os-ten.vercel.app",
-    repo: "https://github.com/rahmanef63/template-personal-brand-os",
-  },
-  {
-    name: "Agency Studio OS",
-    vertical: "Creative agency studio",
-    demo: "https://agency-studio-os.vercel.app",
-    repo: "https://github.com/rahmanef63/template-agency-studio-os",
-  },
-  {
-    name: "Konsultan OS",
-    vertical: "Consultant / advisory",
-    demo: "https://konsultan-os.vercel.app",
-    repo: "https://github.com/rahmanef63/template-konsultan-os",
-  },
-  {
-    name: "Kreator Studio OS",
-    vertical: "Content creator studio",
-    demo: "https://kreator-studio-os.vercel.app",
-    repo: "https://github.com/rahmanef63/template-kreator-studio-os",
-  },
-  {
-    name: "Riset Kit",
-    vertical: "Research / data toolkit",
-    demo: "https://riset-kit.vercel.app",
-    repo: "https://github.com/rahmanef63/template-riset-kit",
-  },
-  {
-    name: "SaaS Marketing OS",
-    vertical: "SaaS marketing site",
-    demo: "https://saas-marketing-os-omega.vercel.app",
-    repo: "https://github.com/rahmanef63/template-saas-marketing-os",
-  },
-  {
-    name: "Wirausaha OS",
-    vertical: "Entrepreneur / e-commerce",
-    demo: "https://wirausaha-os.vercel.app",
-    repo: "https://github.com/rahmanef63/template-wirausaha-os",
-  },
-];
+import { TEMPLATES } from "@/data/templates";
 
 export default function HomePage() {
   return (
@@ -101,28 +50,52 @@ export default function HomePage() {
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {TEMPLATES.map((t) => (
             <article
-              key={t.name}
-              className="group flex flex-col rounded-xl border border-border bg-background p-6 transition-shadow hover:shadow-md"
+              key={t.slug}
+              className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-shadow hover:shadow-md"
             >
-              <h3 className="text-lg font-semibold tracking-tight">{t.name}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{t.vertical}</p>
-              <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium">
-                <a
-                  href={t.demo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary underline-offset-4 hover:underline"
-                >
-                  Live demo →
-                </a>
-                <a
-                  href={t.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
-                >
-                  Get template →
-                </a>
+              {/* eslint-disable-next-line @next/next/no-img-element -- thumbs are pre-sized local webp; <img> avoids next/image remote config for zero gain */}
+              <img
+                src={t.thumb}
+                alt={`${t.title} preview`}
+                loading="lazy"
+                className="aspect-video w-full border-b border-border object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              />
+              <div className="flex flex-1 flex-col p-6">
+                <h3 className="text-lg font-semibold tracking-tight">{t.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{t.vertical}</p>
+                <ul className="mt-4 flex flex-wrap gap-1.5">
+                  {t.features.slice(0, 5).map((f) => (
+                    <li
+                      key={f}
+                      className="rounded-full border border-border bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+                    >
+                      {f}
+                    </li>
+                  ))}
+                  {t.features.length > 5 && (
+                    <li className="rounded-full px-2 py-0.5 text-xs text-muted-foreground">
+                      +{t.features.length - 5} more
+                    </li>
+                  )}
+                </ul>
+                <div className="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-6 text-sm font-medium">
+                  <a
+                    href={t.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary underline-offset-4 hover:underline"
+                  >
+                    Live demo →
+                  </a>
+                  <a
+                    href={t.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                  >
+                    Get template →
+                  </a>
+                </div>
               </div>
             </article>
           ))}
