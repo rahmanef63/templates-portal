@@ -1,10 +1,31 @@
 import Link from "next/link";
 import Image from "next/image";
 import { TEMPLATES } from "@/data/templates";
+import { SITE_URL, SITE_NAME, SITE_DESC } from "./site";
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: SITE_NAME,
+  description: SITE_DESC,
+  url: SITE_URL,
+  numberOfItems: TEMPLATES.length,
+  itemListElement: TEMPLATES.map((t, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: t.title,
+    description: t.blurb,
+    url: t.demo,
+  })),
+};
 
 export default function HomePage() {
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero */}
       <section className="relative overflow-hidden border-b border-border">
         <div

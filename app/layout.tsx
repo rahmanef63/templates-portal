@@ -2,16 +2,24 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { SITE_URL, SITE_NAME, SITE_DESC } from "./site";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: {
-    default: "Templates Portal",
-    template: "%s — Templates Portal",
+  metadataBase: new URL(SITE_URL),
+  title: { default: SITE_NAME, template: `%s — ${SITE_NAME}` },
+  description: SITE_DESC,
+  applicationName: SITE_NAME,
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: SITE_NAME,
+    description: SITE_DESC,
+    url: "/",
   },
-  description:
-    "One place to discover, demo, set up, and update your templates. Build your Brand Kit once and reuse it across every template.",
+  twitter: { card: "summary_large_image", title: SITE_NAME, description: SITE_DESC },
+  robots: { index: true, follow: true },
 };
 
 const NAV = [
