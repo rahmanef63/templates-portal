@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "thumbs": "node scripts/build-thumbs.mjs"
   },
   "dependencies": {
     "next": "^16",

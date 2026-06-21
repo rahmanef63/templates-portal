@@ -48,45 +48,72 @@ export default function HomePage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 lg:gap-5">
           {TEMPLATES.map((t) => (
             <article
               key={t.slug}
-              className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-shadow hover:shadow-md"
+              className="group relative aspect-square overflow-hidden rounded-xl border border-border bg-muted"
             >
-              <div className="relative aspect-video w-full overflow-hidden border-b border-border">
-                <Image
-                  src={t.thumb}
-                  alt={`${t.title} preview`}
-                  fill
-                  sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                />
+              <Image
+                src={t.thumb}
+                alt={`${t.title} preview`}
+                fill
+                sizes="(min-width: 1024px) 360px, 50vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+
+              {/* Mobile (no hover): title + links always visible */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-3 lg:hidden">
+                <h3 className="text-sm font-semibold leading-tight tracking-tight text-white">
+                  {t.title}
+                </h3>
+                <p className="text-[11px] text-white/70">{t.vertical}</p>
+                <div className="mt-1.5 flex gap-3 text-[11px] font-medium">
+                  <a
+                    href={t.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white underline-offset-2 hover:underline"
+                  >
+                    Demo →
+                  </a>
+                  <a
+                    href={t.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/70 underline-offset-2 hover:underline"
+                  >
+                    Repo →
+                  </a>
+                </div>
               </div>
-              <div className="flex flex-1 flex-col p-6">
-                <h3 className="text-lg font-semibold tracking-tight">{t.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">{t.vertical}</p>
-                <ul className="mt-4 flex flex-wrap gap-1.5">
+
+              {/* Desktop: gradient drawer fades in on hover */}
+              <div className="absolute inset-0 hidden flex-col justify-end bg-gradient-to-t from-black/90 via-black/65 to-black/10 p-5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 lg:flex">
+                <h3 className="text-lg font-semibold tracking-tight text-white">{t.title}</h3>
+                <p className="mt-0.5 text-xs text-white/70">{t.vertical}</p>
+                <p className="mt-2 line-clamp-3 text-sm text-white/85">{t.blurb}</p>
+                <ul className="mt-3 flex flex-wrap gap-1.5">
                   {t.features.slice(0, 5).map((f) => (
                     <li
                       key={f}
-                      className="rounded-full border border-border bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+                      className="rounded-full border border-white/20 bg-white/10 px-2 py-0.5 text-[11px] text-white/90 backdrop-blur-sm"
                     >
                       {f}
                     </li>
                   ))}
                   {t.features.length > 5 && (
-                    <li className="rounded-full px-2 py-0.5 text-xs text-muted-foreground">
-                      +{t.features.length - 5} more
+                    <li className="px-1 py-0.5 text-[11px] text-white/60">
+                      +{t.features.length - 5}
                     </li>
                   )}
                 </ul>
-                <div className="mt-auto flex flex-wrap gap-x-5 gap-y-2 pt-6 text-sm font-medium">
+                <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium">
                   <a
                     href={t.demo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary underline-offset-4 hover:underline"
+                    className="text-white underline-offset-4 hover:underline"
                   >
                     Live demo →
                   </a>
@@ -94,7 +121,7 @@ export default function HomePage() {
                     href={t.repo}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
+                    className="text-white/75 underline-offset-4 hover:text-white hover:underline"
                   >
                     Get template →
                   </a>
