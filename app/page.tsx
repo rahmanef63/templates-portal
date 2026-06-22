@@ -16,7 +16,7 @@ const jsonLd = {
     position: i + 1,
     name: t.title,
     description: t.blurb,
-    url: t.demo,
+    url: t.demo || `${SITE_URL}/t/${t.slug}`,
   })),
 };
 
@@ -106,13 +106,24 @@ export default function HomePage() {
               className="reveal group flex flex-col overflow-hidden rounded-xl border border-border bg-muted/30 transition-colors hover:border-primary/50"
             >
               <div className="relative aspect-[40/21] w-full overflow-hidden border-b border-border bg-muted">
-                <Image
-                  src={t.thumb}
-                  alt={`${t.title} preview`}
-                  fill
-                  sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                />
+                {t.thumb ? (
+                  <Image
+                    src={t.thumb}
+                    alt={`${t.title} preview`}
+                    fill
+                    sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                  />
+                ) : (
+                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-muted to-background">
+                    <span className="font-mono text-[11px] uppercase tracking-wider text-primary">
+                      All blocks
+                    </span>
+                    <span className="text-lg font-semibold tracking-tight">
+                      Live component showcase
+                    </span>
+                  </div>
+                )}
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <h3 className="font-semibold tracking-tight">{t.title}</h3>

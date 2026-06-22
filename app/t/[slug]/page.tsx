@@ -13,7 +13,10 @@ import { TEMPLATES } from "@/data/templates";
 type Params = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return TEMPLATES.map((t) => ({ slug: t.slug }));
+  // "custom" has its own static route (app/t/custom/page.tsx) — exclude it here.
+  return TEMPLATES.filter((t) => t.slug !== "custom").map((t) => ({
+    slug: t.slug,
+  }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {

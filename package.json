@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
     "thumbs": "python3 scripts/build-thumbs.py"
   },
   "dependencies": {

@@ -163,4 +163,28 @@ export const TEMPLATES: TemplateEntry[] = [
       "Contact form",
     ],
   },
+  {
+    // Not a deployable site — its detail page (/t/custom) is a LIVE showcase of
+    // every shared block (the portal's centralized component library). Empty
+    // thumb → gallery renders a styled tile instead of a screenshot; empty
+    // demo/repo → /t/custom is the demo. Excluded from /t/[slug] static params.
+    slug: "custom",
+    title: "Custom OS",
+    vertical: "All blocks / build-your-own",
+    blurb:
+      "Every shared block on one page — the portal's component library rendered live. Compose your own template from stats, features, pricing, testimonials, FAQ, and CTA, then drop in your Brand Kit.",
+    demo: "",
+    repo: "",
+    thumb: "",
+    features: [
+      "Stats strip",
+      "Feature grid",
+      "Pricing tiers",
+      "Testimonials",
+      "FAQ accordion",
+      "CTA band",
+      "Refined-dark tokens",
+      "Brand Kit ready",
+    ],
+  },
 ];
