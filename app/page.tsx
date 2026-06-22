@@ -72,8 +72,8 @@ export default function HomePage() {
             Template gallery
           </h2>
           <p className="text-muted-foreground">
-            Seven production-ready templates, each for a different vertical. Try
-            the live demo, then clone the repo to make it yours.
+            {TEMPLATES.length} production-ready templates, each for a different
+            vertical. Try the live demo, then clone the repo to make it yours.
           </p>
         </div>
 
@@ -138,9 +138,13 @@ export default function HomePage() {
       </section>
 
       {/* Teasers */}
-      <section className="border-t border-border bg-muted/40">
+      <section className="border-t border-border bg-gradient-to-b from-muted/30 to-background">
         <div className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:grid-cols-2 sm:px-6 sm:py-20">
-          <div className="flex flex-col rounded-xl border border-border bg-background p-8">
+          <div className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-muted/30 p-8 transition-colors hover:border-primary/50">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-primary/15 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+            />
             <h3 className="text-xl font-semibold tracking-tight">Brand Kit</h3>
             <p className="mt-3 flex-1 text-muted-foreground">
               Define your colors, fonts, logo, and voice once. Export a portable
@@ -155,7 +159,11 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="flex flex-col rounded-xl border border-border bg-background p-8">
+          <div className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-muted/30 p-8 transition-colors hover:border-primary/50">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-20 -top-20 h-48 w-48 rounded-full bg-primary/15 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+            />
             <h3 className="text-xl font-semibold tracking-tight">
               Setup in one command
             </h3>
@@ -165,7 +173,7 @@ export default function HomePage() {
             </p>
             <Link
               href="/docs/setup"
-              className="mt-6 inline-flex w-fit rounded-lg border border-border px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-muted"
+              className="mt-6 inline-flex w-fit rounded-lg border border-border px-4 py-2.5 text-sm font-semibold transition-colors hover:border-primary/50 hover:bg-muted"
             >
               Read the setup guide →
             </Link>
