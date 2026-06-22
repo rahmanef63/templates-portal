@@ -26,6 +26,17 @@
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+
+  /* Tokens the vendored three-column layout expects, mapped to the portal
+     palette so its panel chrome reads on-brand (muted surfaces, one accent). */
+  --color-accent: var(--muted);
+  --color-accent-foreground: var(--foreground);
+  --color-sidebar: var(--muted);
+  --color-sidebar-foreground: var(--foreground);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-accent: var(--muted);
+  --color-sidebar-accent-foreground: var(--foreground);
+  --color-sidebar-ring: var(--primary);
 }
 
 * {

@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, X } from "@phosphor-icons/react/dist/ssr";
+import { ThreeColumnLayoutAdvanced } from "@/components/three-column/ThreeColumnLayout";
 import {
   REGISTRY,
   DEFAULT_CONFIG,
@@ -45,7 +46,6 @@ export default function Builder() {
     DEFAULT_CONFIG.blocks[0]?.id ?? null,
   );
   const [loaded, setLoaded] = useState(false);
-  const inspectorRef = useRef<HTMLElement>(null);
 
   // Restore a saved config on mount (client only) so SSR/hydration match the seed.
   useEffect(() => {
@@ -80,13 +80,6 @@ export default function Builder() {
       // ignore quota errors
     }
   }, [blocks, pages, collections, loaded]);
-
-  // Pull the inspector into view on selection: a no-op on desktop (already
-  // sticky-visible), but on mobile it scrolls the edit form into view so the
-  // select -> edit loop actually responds.
-  useEffect(() => {
-    if (selectedId) inspectorRef.current?.scrollIntoView({ block: "nearest" });
-  }, [selectedId]);
 
   const config: PageConfig = { version: 1, blocks, pages, collections };
 
@@ -216,15 +209,13 @@ export default function Builder() {
       : "border border-border text-muted-foreground hover:border-primary/50 hover:text-foreground");
 
   return (
-    <div className="flex flex-col">
-      {/* Toolbar + page tabs stick below the site nav (h-16). */}
-      <div className="sticky top-16 z-30 border-b border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-[1600px] items-center px-4">
-          <Toolbar config={config} onImport={importConfig} onReset={reset} />
-        </div>
+    <div className="flex h-[calc(100dvh-4rem)] flex-col">
+      {/* Chrome: toolbar + page tabs. Fixed height; the panels scroll inside. */}
+      <div className="flex-shrink-0">
+        <Toolbar config={config} onImport={importConfig} onReset={reset} />
 
         {/* Page tabs — Home + extra pages share one config + collections. */}
-        <div className="mx-auto flex h-11 max-w-[1600px] items-center gap-1.5 overflow-x-auto border-t border-border px-4">
+        <div className="flex h-11 items-center gap-1.5 overflow-x-auto border-b border-border px-4">
           <span className="pr-1 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
             Pages
           </span>
@@ -271,113 +262,125 @@ export default function Builder() {
         </div>
       </div>
 
-      <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 lg:grid-cols-[220px_1fr_340px]">
-        {/* Palette */}
-        <aside
-          aria-label="Block palette"
-          className="border-b border-border p-4 lg:sticky lg:top-[10.25rem] lg:max-h-[calc(100dvh-10.25rem)] lg:overflow-y-auto lg:border-b-0 lg:border-r"
-        >
-          <BlockPalette onAdd={addBlock} />
-        </aside>
-
-        {/* Canvas — live preview of the active page */}
-        <main aria-label="Page preview" className="min-w-0 overflow-x-hidden bg-muted/10">
-          {activeBlocks.length === 0 ? (
-            <div className="flex min-h-[50vh] items-center justify-center p-10 text-center text-sm text-muted-foreground">
-              Empty page. Add a block from the left to start building.
+      {/* Three-column app shell (vendored from resources): collapsible +
+          resizable panels, with a bottom inspector drawer on mobile. */}
+      <div className="min-h-0 flex-1">
+        <ThreeColumnLayoutAdvanced
+          tone="layout"
+          leftWidth={240}
+          rightWidth={360}
+          centerMinWidth={320}
+          minSideWidth={200}
+          maxSideWidth={520}
+          resizable
+          showCollapseButtons
+          persistState
+          storageKey="portal-builder-3col"
+          leftLabel="Blocks"
+          centerLabel="Preview"
+          rightLabel="Inspector"
+          left={
+            <div className="p-4">
+              <BlockPalette onAdd={addBlock} />
             </div>
-          ) : (
-            activeBlocks.map((b, i) => {
-              const def = REGISTRY[b.type];
-              if (!def) return null;
-              return (
-                <CanvasItem
-                  key={b.id}
-                  def={def}
-                  instance={b}
-                  injected={injectedFor(b)}
-                  selected={b.id === selectedId}
-                  onSelect={() => setSelectedId(b.id)}
-                  onMoveUp={() => move(b.id, -1)}
-                  onMoveDown={() => move(b.id, 1)}
-                  onRemove={() => remove(b.id)}
-                  isFirst={i === 0}
-                  isLast={i === activeBlocks.length - 1}
-                />
-              );
-            })
-          )}
-        </main>
-
-        {/* Inspector */}
-        <aside
-          ref={inspectorRef}
-          aria-label="Block inspector"
-          className="scroll-mt-[10.25rem] border-t border-border p-4 lg:sticky lg:top-[10.25rem] lg:max-h-[calc(100dvh-10.25rem)] lg:overflow-y-auto lg:border-t-0 lg:border-l"
-        >
-          {selected ? (
-            <div>
-              <div className="mb-4 flex items-center justify-between gap-2">
-                <h2 className="font-mono text-[11px] uppercase tracking-wider text-primary">
-                  {REGISTRY[selected.type]?.name ?? selected.type}
-                </h2>
-                <button
-                  type="button"
-                  onClick={() => remove(selected.id)}
-                  className="rounded-md border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-                >
-                  Remove
-                </button>
-              </div>
-              <FieldEditor
-                key={selected.id}
-                fields={REGISTRY[selected.type].fields}
-                value={selected.props}
-                onChange={(next) => updateProps(selected.id, next)}
-              />
-
-              {REGISTRY[selected.type]?.collection ? (
-                <div className="mt-6 border-t border-border pt-4">
-                  <p className="mb-1 font-mono text-[11px] uppercase tracking-wider text-primary">
-                    Shared collection
-                    {selected.props.source
-                      ? `: ${String(selected.props.source)}`
-                      : ""}
-                  </p>
-                  <p className="mb-3 text-xs text-muted-foreground">
-                    Edited once, shared by every block and page using this name.
-                  </p>
-                  <FieldEditor
-                    key={`col-${String(selected.props.source ?? "")}`}
-                    fields={[
-                      {
-                        key: "items",
-                        label: "Items",
-                        type: "list",
-                        itemLabel: "item",
-                        itemFields: COLLECTION_ITEM_FIELDS,
-                      },
-                    ]}
-                    value={{
-                      items: collections[String(selected.props.source ?? "")] ?? [],
-                    }}
-                    onChange={(v) =>
-                      updateCollection(
-                        String(selected.props.source ?? ""),
-                        (v.items as Item[]) ?? [],
-                      )
-                    }
-                  />
+          }
+          center={
+            <div className="min-h-full bg-muted/10">
+              {activeBlocks.length === 0 ? (
+                <div className="flex min-h-[50vh] items-center justify-center p-10 text-center text-sm text-muted-foreground">
+                  Empty page. Add a block from the left to start building.
                 </div>
-              ) : null}
+              ) : (
+                activeBlocks.map((b, i) => {
+                  const def = REGISTRY[b.type];
+                  if (!def) return null;
+                  return (
+                    <CanvasItem
+                      key={b.id}
+                      def={def}
+                      instance={b}
+                      injected={injectedFor(b)}
+                      selected={b.id === selectedId}
+                      onSelect={() => setSelectedId(b.id)}
+                      onMoveUp={() => move(b.id, -1)}
+                      onMoveDown={() => move(b.id, 1)}
+                      onRemove={() => remove(b.id)}
+                      isFirst={i === 0}
+                      isLast={i === activeBlocks.length - 1}
+                    />
+                  );
+                })
+              )}
             </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Select a block in the canvas to edit its content, or add one from
-              the left.
-            </p>
-          )}
-        </aside>
+          }
+          right={
+            <div className="p-4">
+              {selected ? (
+                <div>
+                  <div className="mb-4 flex items-center justify-between gap-2">
+                    <h2 className="font-mono text-[11px] uppercase tracking-wider text-primary">
+                      {REGISTRY[selected.type]?.name ?? selected.type}
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={() => remove(selected.id)}
+                      className="rounded-md border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  <FieldEditor
+                    key={selected.id}
+                    fields={REGISTRY[selected.type].fields}
+                    value={selected.props}
+                    onChange={(next) => updateProps(selected.id, next)}
+                  />
+
+                  {REGISTRY[selected.type]?.collection ? (
+                    <div className="mt-6 border-t border-border pt-4">
+                      <p className="mb-1 font-mono text-[11px] uppercase tracking-wider text-primary">
+                        Shared collection
+                        {selected.props.source
+                          ? `: ${String(selected.props.source)}`
+                          : ""}
+                      </p>
+                      <p className="mb-3 text-xs text-muted-foreground">
+                        Edited once, shared by every block and page using this name.
+                      </p>
+                      <FieldEditor
+                        key={`col-${String(selected.props.source ?? "")}`}
+                        fields={[
+                          {
+                            key: "items",
+                            label: "Items",
+                            type: "list",
+                            itemLabel: "item",
+                            itemFields: COLLECTION_ITEM_FIELDS,
+                          },
+                        ]}
+                        value={{
+                          items:
+                            collections[String(selected.props.source ?? "")] ?? [],
+                        }}
+                        onChange={(v) =>
+                          updateCollection(
+                            String(selected.props.source ?? ""),
+                            (v.items as Item[]) ?? [],
+                          )
+                        }
+                      />
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Select a block in the canvas to edit its content, or add one
+                  from the left.
+                </p>
+              )}
+            </div>
+          }
+        />
       </div>
     </div>
   );
