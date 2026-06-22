@@ -2,19 +2,20 @@
 
 @theme {
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
 :root {
-  /* Dark, violet-accented premium theme — matches the dark meta-image set the
-     gallery wall renders. Cascades to every page via the tokens below. */
+  /* Refined-dark dev-tool theme: neutral off-black (faint cool zinc) base + ONE
+     emerald accent. No violet, no glow, no gradient text (de-slopped). */
   color-scheme: dark;
-  --background: oklch(0.15 0.008 275);
+  --background: oklch(0.165 0.005 250);
   --foreground: oklch(0.97 0 0);
-  --muted: oklch(0.21 0.012 275);
-  --muted-foreground: oklch(0.7 0.018 275);
-  --border: oklch(0.27 0.012 275);
-  --primary: oklch(0.62 0.2 285);
-  --primary-foreground: oklch(0.99 0 0);
+  --muted: oklch(0.215 0.006 250);
+  --muted-foreground: oklch(0.71 0.01 250);
+  --border: oklch(0.28 0.006 250);
+  --primary: oklch(0.74 0.15 162);
+  --primary-foreground: oklch(0.17 0.02 162);
 }
 
 @theme inline {
@@ -49,4 +50,26 @@ body {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
   border-radius: 3px;
+}
+
+/* Scroll-reveal: pure CSS scroll-driven animation, zero JS. Gated behind
+   reduced-motion + @supports so older browsers / reduced-motion just show content. */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 28%;
+    }
+  }
 }

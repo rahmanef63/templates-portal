@@ -19,7 +19,7 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "84px",
-          background: "#0d0b14",
+          background: "#0d0d0f",
           color: "white",
           fontFamily: "sans-serif",
         }}
@@ -33,19 +33,19 @@ export default function OpengraphImage() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              background: "linear-gradient(135deg,#7c3aed,#d946ef)",
+              background: "linear-gradient(135deg,#059669,#10b981)",
               fontSize: 34,
               fontWeight: 700,
             }}
           >
             P
           </div>
-          <div style={{ fontSize: 28, color: "#a8a3c7" }}>{SITE_NAME}</div>
+          <div style={{ fontSize: 28, color: "#a1a1aa" }}>{SITE_NAME}</div>
         </div>
         <div style={{ display: "flex", fontSize: 78, fontWeight: 800, lineHeight: 1.04, letterSpacing: -2, maxWidth: 960 }}>
           Discover, demo &amp; ship your templates.
         </div>
-        <div style={{ display: "flex", fontSize: 30, color: "#b6a8e6", marginTop: 30, maxWidth: 940 }}>
+        <div style={{ display: "flex", fontSize: 30, color: "#a1a1aa", marginTop: 30, maxWidth: 940 }}>
           7 production-ready Next.js + Convex templates · one Brand Kit · live in minutes
         </div>
       </div>
