@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { CaretUp, CaretDown, Trash } from "@phosphor-icons/react/dist/ssr";
+import { CaretUp, CaretDown, Copy, Trash } from "@phosphor-icons/react/dist/ssr";
 import type { BlockDef, BlockInstance } from "@/components/blocks/types";
 
 /**
@@ -27,6 +27,7 @@ export default function CanvasItem({
   onSelect,
   onMoveUp,
   onMoveDown,
+  onDuplicate,
   onRemove,
   isFirst,
   isLast,
@@ -40,6 +41,7 @@ export default function CanvasItem({
   onSelect: () => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
+  onDuplicate: () => void;
   onRemove: () => void;
   isFirst: boolean;
   isLast: boolean;
@@ -123,6 +125,15 @@ export default function CanvasItem({
           className={iconBtn}
         >
           <CaretDown size={16} weight="bold" aria-hidden />
+        </button>
+        <button
+          type="button"
+          onClick={act(onDuplicate)}
+          aria-label={`Duplicate ${def.name}`}
+          title="Duplicate"
+          className={iconBtn}
+        >
+          <Copy size={16} weight="bold" aria-hidden />
         </button>
         <button
           type="button"

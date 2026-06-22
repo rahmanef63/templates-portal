@@ -143,6 +143,25 @@ export default function Builder() {
     setSelectedId((s) => (s === id ? null : s));
   }
 
+  // Clone a block (deep-copying its props) right after the original, and select it.
+  function duplicate(id: string) {
+    const src = activeBlocks.find((x) => x.id === id);
+    if (!src) return;
+    const clone: BlockInstance = {
+      id: `${src.type}-${crypto.randomUUID().slice(0, 8)}`,
+      type: src.type,
+      props: structuredClone(src.props),
+    };
+    setActiveBlocks((b) => {
+      const j = b.findIndex((x) => x.id === id);
+      if (j < 0) return b;
+      const next = [...b];
+      next.splice(j + 1, 0, clone);
+      return next;
+    });
+    setSelectedId(clone.id);
+  }
+
   // --- pages -------------------------------------------------------------
   function switchPage(id: string) {
     setActivePageId(id);
@@ -162,6 +181,14 @@ export default function Builder() {
     setPages((ps) => [...ps, { id, name, path, blocks: [] }]);
     setActivePageId(id);
     setSelectedId(null);
+  }
+
+  function renamePage(id: string) {
+    const p = pages.find((x) => x.id === id);
+    if (!p) return;
+    const name = window.prompt("Rename page", p.name);
+    if (!name || name === p.name) return;
+    setPages((ps) => ps.map((x) => (x.id === id ? { ...x, name } : x)));
   }
 
   function removePage(id: string) {
@@ -235,7 +262,8 @@ export default function Builder() {
               <button
                 type="button"
                 onClick={() => switchPage(p.id)}
-                title={p.path}
+                onDoubleClick={() => renamePage(p.id)}
+                title={`${p.path} (double-click to rename)`}
                 className="py-1.5 pl-3 pr-1.5 text-sm font-medium whitespace-nowrap"
               >
                 {p.name}
@@ -304,6 +332,7 @@ export default function Builder() {
                       onSelect={() => setSelectedId(b.id)}
                       onMoveUp={() => move(b.id, -1)}
                       onMoveDown={() => move(b.id, 1)}
+                      onDuplicate={() => duplicate(b.id)}
                       onRemove={() => remove(b.id)}
                       isFirst={i === 0}
                       isLast={i === activeBlocks.length - 1}
