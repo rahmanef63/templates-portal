@@ -117,10 +117,10 @@ export default function HomePage() {
                 ) : (
                   <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-muted to-background">
                     <span className="font-mono text-[11px] uppercase tracking-wider text-primary">
-                      All blocks
+                      Page builder
                     </span>
                     <span className="text-lg font-semibold tracking-tight">
-                      Live component showcase
+                      Build your own site
                     </span>
                   </div>
                 )}
