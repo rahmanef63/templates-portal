@@ -22,6 +22,7 @@ import type { BlockDef, BlockInstance } from "@/components/blocks/types";
 export default function CanvasItem({
   def,
   instance,
+  injected,
   selected,
   onSelect,
   onMoveUp,
@@ -32,6 +33,9 @@ export default function CanvasItem({
 }: {
   def: BlockDef;
   instance: BlockInstance;
+  // Props injected for `collection` blocks (their shared items); merged over the
+  // instance props so the canvas preview matches BlockRenderer's output.
+  injected?: Record<string, unknown> | null;
   selected: boolean;
   onSelect: () => void;
   onMoveUp: () => void;
@@ -69,7 +73,7 @@ export default function CanvasItem({
       {/* Live preview, made inert so the block's own interactivity is dead on
           the canvas. The wrapper is the visual block; chrome floats over it. */}
       <div className="pointer-events-none select-none">
-        <Block {...instance.props} />
+        <Block {...instance.props} {...injected} />
       </div>
 
       {/* Select layer: full-size transparent button beneath the chrome. */}

@@ -5,8 +5,11 @@ import {
   REGISTRY,
   DEFAULT_CONFIG,
   createInstance,
+  COLLECTION_ITEM_FIELDS,
 } from "@/components/blocks/registry";
 import type { BlockInstance, PageConfig } from "@/components/blocks/types";
+
+type Item = Record<string, unknown>;
 import FieldEditor from "./FieldEditor";
 import BlockPalette from "./BlockPalette";
 import CanvasItem from "./CanvasItem";
@@ -20,6 +23,11 @@ const STORAGE_KEY = "portal-builder-config-v1";
 // The same config + REGISTRY + BlockRenderer renders identically in templates.
 export default function Builder() {
   const [blocks, setBlocks] = useState<BlockInstance[]>(DEFAULT_CONFIG.blocks);
+  // Shared named item lists. `collection` blocks read these by name, so a
+  // preview block and a full block on the same source stay in sync.
+  const [collections, setCollections] = useState<Record<string, Item[]>>(
+    DEFAULT_CONFIG.collections ?? {},
+  );
   const [selectedId, setSelectedId] = useState<string | null>(
     DEFAULT_CONFIG.blocks[0]?.id ?? null,
   );
@@ -35,6 +43,9 @@ export default function Builder() {
         if (parsed && Array.isArray(parsed.blocks)) {
           setBlocks(parsed.blocks);
           setSelectedId(parsed.blocks[0]?.id ?? null);
+          if (parsed.collections && typeof parsed.collections === "object") {
+            setCollections(parsed.collections as Record<string, Item[]>);
+          }
         }
       }
     } catch {
@@ -47,11 +58,14 @@ export default function Builder() {
   useEffect(() => {
     if (!loaded) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ version: 1, blocks }));
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ version: 1, blocks, collections }),
+      );
     } catch {
       // ignore quota errors
     }
-  }, [blocks, loaded]);
+  }, [blocks, collections, loaded]);
 
   // Pull the inspector into view on selection: a no-op on desktop (already
   // sticky-visible), but on mobile it scrolls the edit form into view so the
@@ -60,7 +74,7 @@ export default function Builder() {
     if (selectedId) inspectorRef.current?.scrollIntoView({ block: "nearest" });
   }, [selectedId]);
 
-  const config: PageConfig = { version: 1, blocks };
+  const config: PageConfig = { version: 1, blocks, collections };
   const selected = blocks.find((b) => b.id === selectedId) ?? null;
 
   function addBlock(type: string) {
@@ -71,6 +85,19 @@ export default function Builder() {
 
   function updateProps(id: string, props: Record<string, unknown>) {
     setBlocks((b) => b.map((x) => (x.id === id ? { ...x, props } : x)));
+  }
+
+  // Replace one named collection's items (shared across every block on it).
+  function updateCollection(name: string, items: Item[]) {
+    if (!name) return;
+    setCollections((c) => ({ ...c, [name]: items }));
+  }
+
+  // Items injected into a `collection` block so the canvas matches BlockRenderer.
+  function injectedFor(b: BlockInstance): Record<string, unknown> | null {
+    return REGISTRY[b.type]?.collection
+      ? { items: collections[String(b.props.source ?? "")] ?? [] }
+      : null;
   }
 
   function move(id: string, dir: -1 | 1) {
@@ -91,6 +118,7 @@ export default function Builder() {
 
   function importConfig(c: PageConfig) {
     setBlocks(c.blocks);
+    setCollections((c.collections as Record<string, Item[]>) ?? {});
     setSelectedId(c.blocks[0]?.id ?? null);
   }
 
@@ -102,6 +130,7 @@ export default function Builder() {
       return;
     }
     setBlocks(DEFAULT_CONFIG.blocks);
+    setCollections(DEFAULT_CONFIG.collections ?? {});
     setSelectedId(DEFAULT_CONFIG.blocks[0]?.id ?? null);
   }
 
@@ -138,6 +167,7 @@ export default function Builder() {
                   key={b.id}
                   def={def}
                   instance={b}
+                  injected={injectedFor(b)}
                   selected={b.id === selectedId}
                   onSelect={() => setSelectedId(b.id)}
                   onMoveUp={() => move(b.id, -1)}
@@ -177,6 +207,41 @@ export default function Builder() {
                 value={selected.props}
                 onChange={(next) => updateProps(selected.id, next)}
               />
+
+              {REGISTRY[selected.type]?.collection ? (
+                <div className="mt-6 border-t border-border pt-4">
+                  <p className="mb-1 font-mono text-[11px] uppercase tracking-wider text-primary">
+                    Shared collection
+                    {selected.props.source
+                      ? `: ${String(selected.props.source)}`
+                      : ""}
+                  </p>
+                  <p className="mb-3 text-xs text-muted-foreground">
+                    Edited once, shared by every block using this name.
+                  </p>
+                  <FieldEditor
+                    key={`col-${String(selected.props.source ?? "")}`}
+                    fields={[
+                      {
+                        key: "items",
+                        label: "Items",
+                        type: "list",
+                        itemLabel: "item",
+                        itemFields: COLLECTION_ITEM_FIELDS,
+                      },
+                    ]}
+                    value={{
+                      items: collections[String(selected.props.source ?? "")] ?? [],
+                    }}
+                    onChange={(v) =>
+                      updateCollection(
+                        String(selected.props.source ?? ""),
+                        (v.items as Item[]) ?? [],
+                      )
+                    }
+                  />
+                </div>
+              ) : null}
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">
