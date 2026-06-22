@@ -23,14 +23,23 @@ interface ToolbarProps {
   onReset: () => void;
 }
 
-// Basic structural guard: a PageConfig must be an object whose `blocks` is an
-// array. We deliberately stay lenient (no per-block validation) so a hand-edited
-// JSON still loads; BlockRenderer skips any block whose type is unknown.
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+// Structural guard: a PageConfig must be a non-null object whose `blocks` is an
+// array, and every block must be a non-null object with a string `type` and a
+// non-null `props` object. This keeps garbage out of BlockRenderer while still
+// accepting any `version` (we normalize it to 1 on commit).
 function isPageConfigShape(value: unknown): value is PageConfig {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    Array.isArray((value as { blocks?: unknown }).blocks)
+  if (!isPlainObject(value)) return false;
+  const { blocks } = value;
+  if (!Array.isArray(blocks)) return false;
+  return blocks.every(
+    (block) =>
+      isPlainObject(block) &&
+      typeof block.type === "string" &&
+      isPlainObject(block.props),
   );
 }
 
@@ -97,11 +106,15 @@ export default function Toolbar({
       setImportError("That is not valid JSON. Check for a stray comma or quote.");
       return;
     }
-    if (!isPageConfigShape(parsed)) {
+    if (!isPlainObject(parsed) || !Array.isArray(parsed.blocks)) {
       setImportError('Expected an object with a "blocks" array.');
       return;
     }
-    onImport(parsed);
+    if (!isPageConfigShape(parsed)) {
+      setImportError('Each block needs a string "type" and a "props" object.');
+      return;
+    }
+    onImport({ ...parsed, version: 1 });
     closeImport();
   }
 
@@ -211,11 +224,17 @@ export default function Toolbar({
             rows={6}
             spellCheck={false}
             placeholder='{ "version": 1, "blocks": [] }'
+            aria-invalid={Boolean(importError)}
+            aria-describedby="builder-import-error"
             className="mt-1.5 w-full resize-y rounded-lg border border-border bg-background px-3 py-2 font-mono text-xs leading-relaxed text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
           />
 
           {importError ? (
-            <p className="mt-2 flex items-start gap-1.5 text-xs text-primary">
+            <p
+              id="builder-import-error"
+              role="alert"
+              className="mt-2 flex items-start gap-1.5 text-xs text-red-400"
+            >
               <Warning weight="bold" className="mt-0.5 size-3.5 shrink-0" />
               <span>{importError}</span>
             </p>

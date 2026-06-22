@@ -60,8 +60,10 @@ export default function CanvasItem({
   return (
     <div
       className={
-        "group relative rounded-xl transition-shadow " +
-        (selected ? "ring-2 ring-primary" : "ring-0")
+        "group relative cursor-pointer rounded-xl transition-shadow " +
+        (selected
+          ? "ring-2 ring-primary"
+          : "ring-1 ring-border hover:ring-primary/40")
       }
     >
       {/* Live preview, made inert so the block's own interactivity is dead on
@@ -84,7 +86,7 @@ export default function CanvasItem({
         className={
           "pointer-events-none absolute left-2 top-2 z-10 rounded-lg border border-border " +
           "bg-background/90 px-2 py-1 font-mono text-[11px] uppercase tracking-wider text-muted-foreground " +
-          "opacity-0 transition-opacity group-hover:opacity-100 " +
+          "opacity-100 lg:opacity-0 lg:group-hover:opacity-100 lg:focus-within:opacity-100 transition-opacity " +
           (selected ? "opacity-100" : "")
         }
       >
@@ -96,7 +98,7 @@ export default function CanvasItem({
         className={
           "pointer-events-auto absolute right-2 top-2 z-10 flex items-center gap-1 rounded-lg " +
           "border border-border bg-background/90 p-1 backdrop-blur " +
-          "opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 " +
+          "opacity-100 lg:opacity-0 lg:group-hover:opacity-100 lg:focus-within:opacity-100 transition-opacity " +
           (selected ? "opacity-100" : "")
         }
       >

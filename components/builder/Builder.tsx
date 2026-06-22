@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   REGISTRY,
   DEFAULT_CONFIG,
@@ -24,6 +24,7 @@ export default function Builder() {
     DEFAULT_CONFIG.blocks[0]?.id ?? null,
   );
   const [loaded, setLoaded] = useState(false);
+  const inspectorRef = useRef<HTMLElement>(null);
 
   // Restore a saved config on mount (client only) so SSR/hydration match the seed.
   useEffect(() => {
@@ -51,6 +52,13 @@ export default function Builder() {
       // ignore quota errors
     }
   }, [blocks, loaded]);
+
+  // Pull the inspector into view on selection: a no-op on desktop (already
+  // sticky-visible), but on mobile it scrolls the edit form into view so the
+  // select -> edit loop actually responds.
+  useEffect(() => {
+    if (selectedId) inspectorRef.current?.scrollIntoView({ block: "nearest" });
+  }, [selectedId]);
 
   const config: PageConfig = { version: 1, blocks };
   const selected = blocks.find((b) => b.id === selectedId) ?? null;
@@ -108,12 +116,15 @@ export default function Builder() {
 
       <div className="mx-auto grid w-full max-w-[1600px] grid-cols-1 lg:grid-cols-[220px_1fr_340px]">
         {/* Palette */}
-        <aside className="border-b border-border p-4 lg:sticky lg:top-[7.5rem] lg:max-h-[calc(100dvh-7.5rem)] lg:overflow-y-auto lg:border-b-0 lg:border-r">
+        <aside
+          aria-label="Block palette"
+          className="border-b border-border p-4 lg:sticky lg:top-[7.5rem] lg:max-h-[calc(100dvh-7.5rem)] lg:overflow-y-auto lg:border-b-0 lg:border-r"
+        >
           <BlockPalette onAdd={addBlock} />
         </aside>
 
         {/* Canvas — live preview */}
-        <main className="min-w-0 overflow-x-hidden bg-muted/10">
+        <main aria-label="Page preview" className="min-w-0 overflow-x-hidden bg-muted/10">
           {blocks.length === 0 ? (
             <div className="flex min-h-[50vh] items-center justify-center p-10 text-center text-sm text-muted-foreground">
               Empty page. Add a block from the left to start building.
@@ -141,13 +152,17 @@ export default function Builder() {
         </main>
 
         {/* Inspector */}
-        <aside className="border-t border-border p-4 lg:sticky lg:top-[7.5rem] lg:max-h-[calc(100dvh-7.5rem)] lg:overflow-y-auto lg:border-t-0 lg:border-l">
+        <aside
+          ref={inspectorRef}
+          aria-label="Block inspector"
+          className="scroll-mt-[7.5rem] border-t border-border p-4 lg:sticky lg:top-[7.5rem] lg:max-h-[calc(100dvh-7.5rem)] lg:overflow-y-auto lg:border-t-0 lg:border-l"
+        >
           {selected ? (
             <div>
               <div className="mb-4 flex items-center justify-between gap-2">
-                <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
+                <h2 className="font-mono text-[11px] uppercase tracking-wider text-primary">
                   {REGISTRY[selected.type]?.name ?? selected.type}
-                </p>
+                </h2>
                 <button
                   type="button"
                   onClick={() => remove(selected.id)}
