@@ -266,7 +266,7 @@ export default function Builder() {
           resizable panels, with a bottom inspector drawer on mobile. */}
       <div className="min-h-0 flex-1">
         <ThreeColumnLayoutAdvanced
-          tone="layout"
+          tone="feature"
           leftWidth={240}
           rightWidth={360}
           centerMinWidth={320}
