@@ -2,18 +2,18 @@ import { ImageResponse } from "next/og";
 import { SITE_NAME } from "./site";
 
 // File-based OG image — Next auto-applies it as og:image + twitter:image for
-// every route. Editorial "paper & vermilion" masthead to match the site.
+// every route. Editorial "ink & vermilion" (dark) masthead to match the site.
 // Satori-safe styles only (every multi-child element is display:flex; leaves
 // are single text; Georgia serif + monospace are built-in fallbacks).
 export const alt = SITE_NAME;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const PAPER = "#FAF7F1";
-const INK = "#26211B";
-const VERMILION = "#C31800";
-const MUTED = "#78716A";
-const RULE = "#5A544C";
+const PAPER = "#171310"; // warm near-black stock
+const INK = "#EDE9E3"; // warm off-white ink
+const VERMILION = "#EF5A3D";
+const MUTED = "#A69C90";
+const RULE = "#7D7468";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -78,7 +78,7 @@ export default function OpengraphImage() {
             maxWidth: 960,
           }}
         >
-          7 Next.js 16 + Convex templates · one Brand Kit · by Rahman Effendi
+          7 Next.js 16 + Convex templates · one Brand Kit · by Rahman Fakhrul
         </div>
       </div>
     ),

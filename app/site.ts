@@ -5,12 +5,12 @@ export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://free-template.rahmanef.com";
 export const SITE_NAME = "Free Templates";
 export const SITE_DESC =
-  "A free, open collection of production Next.js + Convex templates by Rahman Effendi. Clone, brand with your Brand Kit, and ship — no backend to wire, no lock-in.";
+  "A free, open collection of production Next.js + Convex templates by Rahman Fakhrul. Clone, brand with your Brand Kit, and ship — no backend to wire, no lock-in.";
 
 // The maker. Single source for attribution across footer, metadata, and the
 // maker section. Rahman ships this fleet + rahman-resources (a slice library).
 export const MAKER = {
-  name: "Rahman Effendi",
+  name: "Rahman Fakhrul",
   handle: "rahmanef63",
   site: "https://rahmanef.com",
   github: "https://github.com/rahmanef63",

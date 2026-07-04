@@ -9,19 +9,18 @@
 }
 
 :root {
-  /* "The Index — Paper & Vermilion": a warm newsprint stock, warm near-black
-     ink, and ONE editorial vermilion accent. A committed LIGHT theme that
-     inverts the fleet's dark dev-tool default. Vermilion is tuned to
-     oklch L=0.52 so it clears WCAG AA (>=4.5:1) as small text AND as a fill. */
-  color-scheme: light;
-  --background: oklch(0.977 0.008 84);        /* warm paper */
-  --foreground: oklch(0.215 0.012 60);        /* warm ink */
-  --muted: oklch(0.947 0.011 83);             /* recessed paper surface */
-  --muted-foreground: oklch(0.505 0.016 62);  /* ink-gray metadata (5.5:1) */
-  --border: oklch(0.845 0.013 78);            /* hairline rule */
-  --primary: oklch(0.52 0.205 33);            /* vermilion — the only accent */
-  --primary-foreground: oklch(0.980 0.008 84);/* paper on vermilion */
-  --rule: oklch(0.42 0.012 60);               /* strong masthead / section divider */
+  /* "The Index — Ink & Vermilion" (dark): a warm near-black stock, warm off-white
+     ink, and ONE editorial vermilion accent. Vermilion is tuned to oklch L=0.66
+     so it clears WCAG AA (>=4.5:1, actual 5.46) as small text AND as a fill. */
+  color-scheme: dark;
+  --background: oklch(0.19 0.008 60);         /* warm near-black */
+  --foreground: oklch(0.94 0.006 84);         /* warm off-white (15.5:1) */
+  --muted: oklch(0.24 0.008 60);              /* recessed dark surface */
+  --muted-foreground: oklch(0.66 0.012 70);   /* ink-gray metadata (5.9:1) */
+  --border: oklch(0.34 0.008 60);             /* hairline rule */
+  --primary: oklch(0.66 0.19 33);             /* vermilion — the only accent */
+  --primary-foreground: oklch(0.19 0.008 60); /* near-black on vermilion (5.5:1) */
+  --rule: oklch(0.52 0.01 60);                /* strong masthead / section divider */
 }
 
 @theme inline {

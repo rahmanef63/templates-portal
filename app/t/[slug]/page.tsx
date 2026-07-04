@@ -9,6 +9,7 @@ import {
   Check,
 } from "@phosphor-icons/react/dist/ssr";
 import { TEMPLATES } from "@/data/templates";
+import { getLang, getDict } from "../../dictionaries";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -31,15 +32,16 @@ export default async function TemplateDetail({ params }: Params) {
   const { slug } = await params;
   const t = TEMPLATES.find((x) => x.slug === slug);
   if (!t) notFound();
+  const d = getDict(await getLang()).detail;
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
       <Link
-        href="/#gallery"
+        href="/#index"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft weight="bold" className="size-4" />
-        All templates
+        {d.all}
       </Link>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-14">
@@ -62,7 +64,7 @@ export default async function TemplateDetail({ params }: Params) {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-primary px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-foreground transition-transform hover:-translate-y-0.5"
               >
-                Live demo
+                {d.liveDemo}
                 <ArrowUpRight weight="bold" className="size-4" />
               </a>
             ) : null}
@@ -74,13 +76,13 @@ export default async function TemplateDetail({ params }: Params) {
                 className="group inline-flex items-center gap-2 border-b border-primary pb-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground"
               >
                 <GithubLogo weight="bold" className="size-4 text-primary" />
-                Get the repo
+                {d.getRepo}
               </a>
             ) : null}
           </div>
 
           <h2 className="mt-14 border-t border-border pt-6 text-xs font-mono uppercase tracking-[0.22em] text-primary">
-            What it ships
+            {d.ships}
           </h2>
           <ul className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
             {t.features.map((f) => (
@@ -107,7 +109,7 @@ export default async function TemplateDetail({ params }: Params) {
             />
           </div>
           <figcaption className="mt-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-            Fig. — {t.vertical}
+            {d.fig} — {t.vertical}
           </figcaption>
         </figure>
       </div>
