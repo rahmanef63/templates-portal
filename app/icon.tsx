@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 
-// Generated favicon — "F" mark in the Geist blue accent on near-black.
+// Generated favicon — filled Geist-blue tile with a white "F", so it stays
+// visible on both light and dark browser tab bars.
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
@@ -14,11 +15,12 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#000000",
-          color: "#52a8ff",
+          borderRadius: 7,
+          background: "#006bff",
+          color: "#ffffff",
           fontFamily: "Georgia, serif",
-          fontSize: 24,
-          fontWeight: 600,
+          fontSize: 22,
+          fontWeight: 700,
         }}
       >
         F
