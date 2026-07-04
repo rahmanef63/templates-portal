@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import type { CSSProperties } from "react";
+import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { TEMPLATES } from "@/data/templates";
-import { SITE_URL, SITE_NAME, SITE_DESC } from "./site";
+import { SITE_URL, SITE_NAME, SITE_DESC, MAKER } from "./site";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -20,8 +21,11 @@ const jsonLd = {
   })),
 };
 
+// Typed CSS custom property for the staggered load-in delay.
+const delay = (i: number) => ({ "--i": i }) as CSSProperties;
+
 export default function HomePage() {
-  const [a, b] = TEMPLATES;
+  const lead = TEMPLATES[0];
   return (
     <div>
       <script
@@ -29,159 +33,236 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Hero — asymmetric split, left-aligned, real thumbnail visual, no glow */}
-      <section className="border-b border-border">
-        <div className="mx-auto grid max-w-6xl gap-12 px-4 pt-20 pb-16 sm:px-6 sm:pt-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16">
-          <div>
-            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
-              <span className="size-1.5 rounded-full bg-primary" />
-              Next.js 16 · Convex · {TEMPLATES.length} verticals
-            </p>
-            <h1 className="text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl">
-              Production templates you clone, brand, and ship.
-            </h1>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              Real Next.js + Convex apps across {TEMPLATES.length} verticals. Build your
-              Brand Kit once, drop it into any template, deploy a branded site in minutes.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#gallery"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
+      {/* HERO — asymmetric editorial split, art-directed staggered first paint. */}
+      <section className="border-b-2 border-[var(--rule)]">
+        <div className="mx-auto max-w-6xl px-6 lg:px-10">
+          <div className="grid gap-10 pt-14 pb-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pt-20 lg:pb-24">
+            <div className="flex flex-col">
+              <p className="load-in font-mono text-xs uppercase tracking-[0.28em] text-primary" style={delay(0)}>
+                The curated index
+              </p>
+              <h1
+                className="load-in mt-6 font-display font-normal leading-[0.98] tracking-[-0.02em] text-foreground text-[clamp(2.75rem,7vw,5.25rem)]"
+                style={delay(1)}
               >
-                Browse templates
-                <ArrowRight weight="bold" className="size-4" />
-              </a>
-              <Link
-                href="/brand-kit"
-                className="inline-flex items-center rounded-lg border border-border px-5 py-3 text-sm font-semibold transition-colors hover:border-primary/50 hover:bg-muted"
+                Production templates you clone, brand &amp;{" "}
+                <em className="font-normal italic text-primary">ship.</em>
+              </h1>
+              <p
+                className="load-in mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground sm:text-xl"
+                style={delay(2)}
               >
-                Build your Brand Kit
-              </Link>
+                Real Next.js&nbsp;16 + Convex apps across {TEMPLATES.length} verticals.
+                Set your Brand Kit once, drop it into any template, and deploy a branded
+                site in minutes.
+              </p>
+              <div className="load-in mt-10 flex flex-wrap items-center gap-6" style={delay(3)}>
+                <a
+                  href="#index"
+                  className="inline-flex items-center gap-2 bg-primary px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-foreground transition-transform hover:-translate-y-0.5"
+                >
+                  Browse the index
+                  <ArrowRight weight="bold" className="size-4" />
+                </a>
+                <Link
+                  href="/brand-kit"
+                  className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-foreground"
+                >
+                  <span className="border-b border-primary pb-1">Build your Brand Kit</span>
+                  <ArrowUpRight
+                    weight="bold"
+                    className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </Link>
+              </div>
             </div>
-          </div>
 
-          {/* Real visual: two template previews, offset stack */}
-          <div className="relative hidden h-[320px] lg:block">
-            <div className="absolute right-8 top-2 w-[80%] overflow-hidden rounded-xl border border-border bg-muted shadow-2xl shadow-black/40">
-              <Image
-                src={b.thumb}
-                alt={`${b.title} preview`}
-                width={1600}
-                height={840}
-                className="w-full"
-              />
-            </div>
-            <div className="absolute bottom-2 left-0 w-[80%] overflow-hidden rounded-xl border border-primary/30 bg-muted shadow-2xl shadow-black/50">
-              <Image
-                src={a.thumb}
-                alt={`${a.title} preview`}
-                width={1600}
-                height={840}
-                priority
-                className="w-full"
-              />
-            </div>
+            {/* Editorial plate — the lead template printed as a framed figure. */}
+            <figure className="load-in relative hidden self-end lg:block" style={delay(4)}>
+              <div className="overflow-hidden border border-[var(--rule)] bg-muted">
+                <Image
+                  src={lead.thumb}
+                  alt={`${lead.title} preview`}
+                  width={1600}
+                  height={840}
+                  priority
+                  className="w-full grayscale-[0.15] contrast-[1.02]"
+                />
+              </div>
+              <figcaption className="mt-3 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                <span>Fig. 01 — {lead.vertical}</span>
+                <a href={lead.demo} className="text-primary">
+                  Live demo ↗
+                </a>
+              </figcaption>
+            </figure>
           </div>
         </div>
       </section>
 
-      {/* Gallery — readable card grid, each links to its detail page */}
-      <section id="gallery" className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
-        <div className="mb-10 flex flex-col gap-2">
-          <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            Template gallery
-          </h2>
-          <p className="max-w-2xl text-muted-foreground">
-            {TEMPLATES.length} production-ready templates, each for a different vertical.
-            Open one to see its features, live demo, and repo.
+      {/* THE INDEX — templates as a magazine table of contents, numbered 00–06. */}
+      <section id="index" className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-24">
+        <div className="flex flex-col gap-3 border-t-2 border-[var(--rule)] pt-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-primary">
+              The Index — {String(TEMPLATES.length).padStart(2, "0")} entries
+            </p>
+            <h2 className="mt-3 font-display text-3xl tracking-[-0.01em] sm:text-4xl">
+              Every template, one contents page
+            </h2>
+          </div>
+          <p className="max-w-sm font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-muted-foreground">
+            Production-ready · one vertical each · open an entry for features, live demo &amp; repo
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="index-list mt-8">
           {TEMPLATES.map((t) => (
             <Link
               key={t.slug}
               href={`/t/${t.slug}`}
-              className="reveal group flex flex-col overflow-hidden rounded-xl border border-border bg-muted/30 transition-colors hover:border-primary/50"
+              className="index-row reveal group grid grid-cols-[auto_1fr] items-start gap-x-6 gap-y-5 border-t border-border py-8 transition-[padding] duration-300 hover:pl-3 sm:grid-cols-[auto_1fr_auto] sm:gap-x-10 sm:py-10"
             >
-              <div className="relative aspect-[40/21] w-full overflow-hidden border-b border-border bg-muted">
-                {t.thumb ? (
-                  <Image
-                    src={t.thumb}
-                    alt={`${t.title} preview`}
-                    fill
-                    sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                  />
-                ) : (
-                  <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-muted to-background">
-                    <span className="font-mono text-[11px] uppercase tracking-wider text-primary">
-                      Page builder
-                    </span>
-                    <span className="text-lg font-semibold tracking-tight">
-                      Build your own site
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-1 flex-col p-5">
-                <h3 className="font-semibold tracking-tight">{t.title}</h3>
-                <p className="mt-0.5 text-sm text-muted-foreground">{t.vertical}</p>
-                <ul className="mt-3 flex flex-wrap gap-1.5">
+              <span className="index-num font-display text-4xl italic leading-none text-muted-foreground transition-colors group-hover:text-primary sm:text-6xl" />
+
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <h3 className="font-display text-2xl font-medium tracking-[-0.01em] text-foreground sm:text-4xl">
+                    {t.title}
+                  </h3>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    {t.vertical}
+                  </span>
+                </div>
+                <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                   {t.features.slice(0, 3).map((f) => (
-                    <li
-                      key={f}
-                      className="rounded-md border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground"
-                    >
+                    <li key={f} className="before:mr-2 before:text-primary before:content-['/']">
                       {f}
                     </li>
                   ))}
                 </ul>
-                <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-medium text-primary">
-                  View details
+                <span className="mt-5 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
+                  Read the entry
                   <ArrowRight
                     weight="bold"
-                    className="size-3.5 transition-transform group-hover:translate-x-0.5"
+                    className="size-3.5 transition-transform group-hover:translate-x-1"
                   />
                 </span>
               </div>
+
+              <figure className="plate col-span-2 overflow-hidden border border-border bg-muted sm:col-span-1 sm:w-64">
+                <div className="relative aspect-[40/21]">
+                  <Image
+                    src={t.thumb}
+                    alt={`${t.title} preview`}
+                    fill
+                    sizes="(min-width:640px) 256px, 100vw"
+                    className="object-cover grayscale transition-all duration-500 group-hover:scale-[1.03] group-hover:grayscale-0"
+                  />
+                </div>
+              </figure>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* Teasers */}
-      <section className="border-t border-border bg-muted/20">
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 py-16 sm:grid-cols-2 sm:px-6 sm:py-20">
-          <div className="flex flex-col rounded-xl border border-border bg-muted/30 p-8 transition-colors hover:border-primary/50">
-            <h3 className="text-xl font-semibold tracking-tight">Brand Kit</h3>
-            <p className="mt-3 flex-1 text-muted-foreground">
-              Define your colors, fonts, logo, and voice once. Export a portable
-              Brand Kit and drop it into any template, entirely client-side, no
-              account required.
-            </p>
-            <Link
-              href="/brand-kit"
-              className="mt-6 inline-flex w-fit items-center gap-1.5 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
-            >
-              Open Brand Kit
-              <ArrowRight weight="bold" className="size-4" />
-            </Link>
+      {/* TOOLKIT — Brand Kit + Setup as two editorial rows (not part of the index). */}
+      <section className="border-t-2 border-[var(--rule)] bg-muted/30">
+        <div className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-24">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-primary">
+            The Toolkit
+          </p>
+          <div className="mt-8 grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2">
+            <div className="flex flex-col bg-background p-8 lg:p-10">
+              <h3 className="font-display text-2xl tracking-[-0.01em] sm:text-3xl">
+                Brand Kit
+              </h3>
+              <p className="mt-4 flex-1 leading-relaxed text-muted-foreground">
+                Define your colors, fonts, logo, and voice once. Export a portable Brand
+                Kit and drop it into any template — entirely client-side, no account.
+              </p>
+              <Link
+                href="/brand-kit"
+                className="mt-8 inline-flex w-fit items-center gap-2 bg-primary px-5 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-primary-foreground transition-transform hover:-translate-y-0.5"
+              >
+                Open Brand Kit
+                <ArrowRight weight="bold" className="size-4" />
+              </Link>
+            </div>
+            <div className="flex flex-col bg-background p-8 lg:p-10">
+              <h3 className="font-display text-2xl tracking-[-0.01em] sm:text-3xl">
+                Setup in one command
+              </h3>
+              <p className="mt-4 flex-1 leading-relaxed text-muted-foreground">
+                Clone, install, run. Every template follows the same setup flow — follow
+                the guide to go from repo to live site fast.
+              </p>
+              <Link
+                href="/docs/setup"
+                className="group mt-8 inline-flex w-fit items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground"
+              >
+                <span className="border-b border-primary pb-1">Read the setup guide</span>
+                <ArrowUpRight
+                  weight="bold"
+                  className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </Link>
+            </div>
           </div>
+        </div>
+      </section>
 
-          <div className="flex flex-col rounded-xl border border-border bg-muted/30 p-8 transition-colors hover:border-primary/50">
-            <h3 className="text-xl font-semibold tracking-tight">Setup in one command</h3>
-            <p className="mt-3 flex-1 text-muted-foreground">
-              Clone, install, and run. Every template follows the same setup flow.
-              Follow the guide to go from repo to live site fast.
-            </p>
-            <Link
-              href="/docs/setup"
-              className="mt-6 inline-flex w-fit items-center rounded-lg border border-border px-4 py-2.5 text-sm font-semibold transition-colors hover:border-primary/50 hover:bg-muted"
-            >
-              Read the setup guide
-            </Link>
+      {/* COLOPHON — the maker, print contributor-bio treatment with a drop-cap. */}
+      <section className="border-t-2 border-[var(--rule)]">
+        <div className="mx-auto max-w-6xl px-6 py-20 lg:px-10 lg:py-28">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-primary">
+            Colophon — About the maker
+          </p>
+          <div className="mt-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+            <div>
+              <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.02em] sm:text-5xl">
+                Built by <span className="italic text-primary">Rahman&nbsp;Effendi</span>
+              </h2>
+              <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                {MAKER.role}
+              </p>
+              <dl className="mt-10 space-y-4 border-t border-border pt-6 font-mono text-xs uppercase tracking-[0.14em]">
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Portfolio</dt>
+                  <dd>
+                    <a href={MAKER.site} className="border-b border-primary pb-0.5 hover:text-primary">
+                      rahmanef.com ↗
+                    </a>
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Source</dt>
+                  <dd>
+                    <a href={MAKER.github} className="border-b border-primary pb-0.5 hover:text-primary">
+                      github.com/{MAKER.handle} ↗
+                    </a>
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Knowledge</dt>
+                  <dd>
+                    <a href={MAKER.resources} className="border-b border-primary pb-0.5 hover:text-primary">
+                      resource.rahmanef.com ↗
+                    </a>
+                  </dd>
+                </div>
+              </dl>
+            </div>
+            <div className="lg:border-l lg:border-border lg:pl-20">
+              <p className="font-display text-2xl leading-[1.5] text-foreground first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-7xl first-letter:font-medium first-letter:leading-[0.7] first-letter:text-primary sm:text-[1.7rem]">
+                I ship a fleet of production Next.js&nbsp;16 + Convex templates and
+                rahman-resources, a slice-based knowledge platform. This portal is the
+                index to all of it — free to clone, brand, and deploy.
+              </p>
+              <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                — Indie builder, shipping in public
+              </p>
+            </div>
           </div>
         </div>
       </section>

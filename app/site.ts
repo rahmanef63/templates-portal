@@ -1,8 +1,20 @@
 // Single source for the portal's identity + canonical URL. Set
-// NEXT_PUBLIC_SITE_URL in Vercel to the real domain; the fallback is the
-// current Vercel alias so OG/sitemap/robots resolve sanely out of the box.
+// NEXT_PUBLIC_SITE_URL in Vercel to override; the fallback is the production
+// domain so OG/sitemap/robots resolve to the real host out of the box.
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://portal-pi-lake.vercel.app";
-export const SITE_NAME = "Templates Portal";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://free-template.rahmanef.com";
+export const SITE_NAME = "Free Templates";
 export const SITE_DESC =
-  "One place to discover, demo, set up, and update your templates. Build your Brand Kit once and reuse it across every template — no backend, no lock-in.";
+  "A free, open collection of production Next.js + Convex templates by Rahman Effendi. Clone, brand with your Brand Kit, and ship — no backend to wire, no lock-in.";
+
+// The maker. Single source for attribution across footer, metadata, and the
+// maker section. Rahman ships this fleet + rahman-resources (a slice library).
+export const MAKER = {
+  name: "Rahman Effendi",
+  handle: "rahmanef63",
+  site: "https://rahmanef.com",
+  github: "https://github.com/rahmanef63",
+  resources: "https://resource.rahmanef.com",
+  email: "rahmanef63@gmail.com",
+  role: "Full-stack builder · Next.js + Convex",
+} as const;

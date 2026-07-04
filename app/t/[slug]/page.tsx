@@ -13,10 +13,7 @@ import { TEMPLATES } from "@/data/templates";
 type Params = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  // "custom" has its own static route (app/t/custom/page.tsx) — exclude it here.
-  return TEMPLATES.filter((t) => t.slug !== "custom").map((t) => ({
-    slug: t.slug,
-  }));
+  return TEMPLATES.map((t) => ({ slug: t.slug }));
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
@@ -50,7 +47,7 @@ export default async function TemplateDetail({ params }: Params) {
           <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
             {t.vertical}
           </p>
-          <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h1 className="mt-3 font-display text-4xl font-medium tracking-[-0.02em] sm:text-6xl">
             {t.title}
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
@@ -63,7 +60,7 @@ export default async function TemplateDetail({ params }: Params) {
                 href={t.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 bg-primary px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-foreground transition-transform hover:-translate-y-0.5"
               >
                 Live demo
                 <ArrowUpRight weight="bold" className="size-4" />
@@ -74,15 +71,15 @@ export default async function TemplateDetail({ params }: Params) {
                 href={t.repo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-border px-5 py-3 text-sm font-semibold transition-colors hover:border-primary/50 hover:bg-muted"
+                className="group inline-flex items-center gap-2 border-b border-primary pb-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground"
               >
-                <GithubLogo weight="bold" className="size-4" />
+                <GithubLogo weight="bold" className="size-4 text-primary" />
                 Get the repo
               </a>
             ) : null}
           </div>
 
-          <h2 className="mt-12 text-sm font-mono uppercase tracking-wider text-muted-foreground">
+          <h2 className="mt-14 border-t border-border pt-6 text-xs font-mono uppercase tracking-[0.22em] text-primary">
             What it ships
           </h2>
           <ul className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
@@ -98,16 +95,21 @@ export default async function TemplateDetail({ params }: Params) {
           </ul>
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-border bg-muted shadow-2xl shadow-black/40 lg:sticky lg:top-24">
-          <Image
-            src={t.thumb}
-            alt={`${t.title} preview`}
-            width={1600}
-            height={840}
-            priority
-            className="w-full"
-          />
-        </div>
+        <figure className="lg:sticky lg:top-28">
+          <div className="overflow-hidden border border-[var(--rule)] bg-muted">
+            <Image
+              src={t.thumb}
+              alt={`${t.title} preview`}
+              width={1600}
+              height={840}
+              priority
+              className="w-full contrast-[1.02]"
+            />
+          </div>
+          <figcaption className="mt-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+            Fig. — {t.vertical}
+          </figcaption>
+        </figure>
       </div>
     </div>
   );

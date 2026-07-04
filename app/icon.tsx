@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-// Generated favicon — the violet "P" mark matching the nav logo.
+// Generated favicon — vermilion serif "F" matching the masthead wordmark.
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
@@ -14,14 +14,14 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          borderRadius: 7,
-          background: "linear-gradient(135deg,#059669,#10b981)",
-          color: "white",
-          fontSize: 22,
-          fontWeight: 700,
+          background: "#C31800",
+          color: "#FAF7F1",
+          fontFamily: "Georgia, serif",
+          fontSize: 24,
+          fontWeight: 600,
         }}
       >
-        P
+        F
       </div>
     ),
     { ...size },

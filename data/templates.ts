@@ -163,28 +163,4 @@ export const TEMPLATES: TemplateEntry[] = [
       "Contact form",
     ],
   },
-  {
-    // Not a deployable site — its detail page (/t/custom) is a LIVE showcase of
-    // every shared block (the portal's centralized component library). Empty
-    // thumb → gallery renders a styled tile instead of a screenshot; empty
-    // demo/repo → /t/custom is the demo. Excluded from /t/[slug] static params.
-    slug: "custom",
-    title: "Custom OS",
-    vertical: "Visual page builder",
-    blurb:
-      "Build a website right here. A visual page-builder over the shared block library — add blocks, edit content, reorder, and export a portable page config any template can render. This is the SSOT.",
-    demo: "",
-    repo: "",
-    thumb: "",
-    features: [
-      "Visual page builder",
-      "Live preview",
-      "Edit any block",
-      "Reorder + delete",
-      "Export / import JSON",
-      "Portable page config",
-      "Shared block library",
-      "Brand Kit ready",
-    ],
-  },
 ];

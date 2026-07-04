@@ -1,21 +1,27 @@
 @import "tailwindcss";
 
+/* Expose the next/font variables as Tailwind v4 font utilities:
+   font-display (editorial serif) · font-sans (grotesk) · font-mono (labels). */
 @theme {
+  --font-display: var(--font-display), "Iowan Old Style", Georgia, serif;
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
 :root {
-  /* Refined-dark dev-tool theme: neutral off-black (faint cool zinc) base + ONE
-     emerald accent. No violet, no glow, no gradient text (de-slopped). */
-  color-scheme: dark;
-  --background: oklch(0.165 0.005 250);
-  --foreground: oklch(0.97 0 0);
-  --muted: oklch(0.215 0.006 250);
-  --muted-foreground: oklch(0.71 0.01 250);
-  --border: oklch(0.28 0.006 250);
-  --primary: oklch(0.74 0.15 162);
-  --primary-foreground: oklch(0.17 0.02 162);
+  /* "The Index — Paper & Vermilion": a warm newsprint stock, warm near-black
+     ink, and ONE editorial vermilion accent. A committed LIGHT theme that
+     inverts the fleet's dark dev-tool default. Vermilion is tuned to
+     oklch L=0.52 so it clears WCAG AA (>=4.5:1) as small text AND as a fill. */
+  color-scheme: light;
+  --background: oklch(0.977 0.008 84);        /* warm paper */
+  --foreground: oklch(0.215 0.012 60);        /* warm ink */
+  --muted: oklch(0.947 0.011 83);             /* recessed paper surface */
+  --muted-foreground: oklch(0.505 0.016 62);  /* ink-gray metadata (5.5:1) */
+  --border: oklch(0.845 0.013 78);            /* hairline rule */
+  --primary: oklch(0.52 0.205 33);            /* vermilion — the only accent */
+  --primary-foreground: oklch(0.980 0.008 84);/* paper on vermilion */
+  --rule: oklch(0.42 0.012 60);               /* strong masthead / section divider */
 }
 
 @theme inline {
@@ -26,17 +32,6 @@
   --color-border: var(--border);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-
-  /* Tokens the vendored three-column layout expects, mapped to the portal
-     palette so its panel chrome reads on-brand (muted surfaces, one accent). */
-  --color-accent: var(--muted);
-  --color-accent-foreground: var(--foreground);
-  --color-sidebar: var(--muted);
-  --color-sidebar-foreground: var(--foreground);
-  --color-sidebar-border: var(--border);
-  --color-sidebar-accent: var(--muted);
-  --color-sidebar-accent-foreground: var(--foreground);
-  --color-sidebar-ring: var(--primary);
 }
 
 * {
@@ -48,39 +43,64 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
+::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
-/* Visible keyboard focus — the UA outline is invisible on the near-black bg. */
+/* Barely-there warm print grain — fixed so it reads as paper stock, not scroll. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Visible keyboard focus — vermilion, offset so it clears the paper. */
 :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
-/* Scroll-reveal: pure CSS scroll-driven animation, zero JS. Gated behind
-   reduced-motion + @supports so older browsers / reduced-motion just show content. */
+/* The Index: magazine table-of-contents numerals via pure CSS counters —
+   no JS, no index prop. counter-reset -1 → first row renders "00". */
+.index-list { counter-reset: idx -1; }
+.index-row { counter-increment: idx; }
+.index-num::before { content: counter(idx, decimal-leading-zero); }
+
+/* On touch (no hover), the grayscale plates never develop — show them in
+   full color so the gallery isn't muted on phones. */
+@media (hover: none) {
+  .plate img { filter: none !important; }
+}
+
+/* Art-directed first paint: staggered rise+blur. Elements set --i for delay. */
+@keyframes load-in {
+  from { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+/* Scroll-reveal for below-the-fold rows. */
 @keyframes reveal-in {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: no-preference) {
+  .load-in {
+    animation: load-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 110ms);
+  }
   @supports (animation-timeline: view()) {
     .reveal {
       animation: reveal-in linear both;
       animation-timeline: view();
-      animation-range: entry 0% cover 28%;
+      animation-range: entry 0% cover 26%;
     }
   }
 }

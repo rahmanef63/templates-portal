@@ -1,12 +1,19 @@
 import { ImageResponse } from "next/og";
 import { SITE_NAME } from "./site";
 
-// File-based OG image — Next auto-applies it as the og:image + twitter:image
-// for every route. Dark, violet-accented to match the site. Satori-safe styles
-// only (every multi-child element is display:flex; leaves are single text).
+// File-based OG image — Next auto-applies it as og:image + twitter:image for
+// every route. Editorial "paper & vermilion" masthead to match the site.
+// Satori-safe styles only (every multi-child element is display:flex; leaves
+// are single text; Georgia serif + monospace are built-in fallbacks).
 export const alt = SITE_NAME;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+const PAPER = "#FAF7F1";
+const INK = "#26211B";
+const VERMILION = "#C31800";
+const MUTED = "#78716A";
+const RULE = "#5A544C";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -17,36 +24,61 @@ export default function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          padding: "84px",
-          background: "#0d0d0f",
-          color: "white",
-          fontFamily: "sans-serif",
+          padding: "72px 84px",
+          background: PAPER,
+          color: INK,
+          fontFamily: "Georgia, serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 18, marginBottom: 32 }}>
-          <div
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: 14,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: "linear-gradient(135deg,#059669,#10b981)",
-              fontSize: 34,
-              fontWeight: 700,
-            }}
-          >
-            P
-          </div>
-          <div style={{ fontSize: 28, color: "#a1a1aa" }}>{SITE_NAME}</div>
+        {/* dateline */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            borderBottom: `2px solid ${RULE}`,
+            paddingBottom: 20,
+            fontFamily: "monospace",
+            fontSize: 22,
+            letterSpacing: 4,
+            color: MUTED,
+          }}
+        >
+          <div style={{ display: "flex" }}>FREE TEMPLATES — ISSUE Nº 01</div>
+          <div style={{ display: "flex", color: VERMILION }}>THE CURATED INDEX</div>
         </div>
-        <div style={{ display: "flex", fontSize: 78, fontWeight: 800, lineHeight: 1.04, letterSpacing: -2, maxWidth: 960 }}>
-          Discover, demo &amp; ship your templates.
+
+        {/* headline */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            marginTop: "auto",
+            fontSize: 88,
+            fontWeight: 500,
+            lineHeight: 1.02,
+            letterSpacing: -2,
+            maxWidth: 1000,
+          }}
+        >
+          Production templates you clone, brand &amp;&nbsp;
+          <span style={{ display: "flex", fontStyle: "italic", color: VERMILION }}>
+            ship.
+          </span>
         </div>
-        <div style={{ display: "flex", fontSize: 30, color: "#a1a1aa", marginTop: 30, maxWidth: 940 }}>
-          7 production-ready Next.js + Convex templates · one Brand Kit · live in minutes
+
+        {/* subline */}
+        <div
+          style={{
+            display: "flex",
+            marginTop: 28,
+            fontFamily: "monospace",
+            fontSize: 24,
+            letterSpacing: 1,
+            color: MUTED,
+            maxWidth: 960,
+          }}
+        >
+          7 Next.js 16 + Convex templates · one Brand Kit · by Rahman Effendi
         </div>
       </div>
     ),

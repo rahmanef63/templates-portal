@@ -1,17 +1,42 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Hanken_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
-import { SITE_URL, SITE_NAME, SITE_DESC } from "./site";
+import { SITE_URL, SITE_NAME, SITE_DESC, MAKER } from "./site";
 
-const geistSans = Geist({ subsets: ["latin"], variable: "--font-sans" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
+// Display — editorial variable serif. opsz/SOFT/WONK carry the character; italic
+// is used for pull-words. No `weight` prop: a variable font drives weight via axis.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-display",
+  style: ["normal", "italic"],
+  axes: ["SOFT", "WONK", "opsz"],
+  display: "swap",
+});
+
+// Body — clean neo-grotesque for UI + prose.
+const hanken = Hanken_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+// Metadata / labels / numerals — credible dev-tool mono.
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: SITE_NAME, template: `%s — ${SITE_NAME}` },
   description: SITE_DESC,
   applicationName: SITE_NAME,
+  authors: [{ name: MAKER.name, url: MAKER.site }],
+  creator: MAKER.name,
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
@@ -24,7 +49,7 @@ export const metadata: Metadata = {
 };
 
 const NAV = [
-  { href: "/", label: "Home" },
+  { href: "/", label: "Index" },
   { href: "/brand-kit", label: "Brand Kit" },
   { href: "/docs/setup", label: "Setup" },
   { href: "/docs/update", label: "Update" },
@@ -33,65 +58,112 @@ const NAV = [
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const year = new Date().getFullYear();
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="en"
+      className={`${fraunces.variable} ${hanken.variable} ${plexMono.variable}`}
+    >
       <body className="min-h-screen flex flex-col">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground"
         >
           Skip to content
         </a>
-        <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur">
-          <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-            <Link
-              href="/"
-              className="flex items-center gap-2 font-semibold tracking-tight"
-            >
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground text-sm font-bold">
-                P
-              </span>
-              <span className="hidden sm:inline">Templates Portal</span>
-            </Link>
-            <ul className="flex items-center gap-1 sm:gap-2 text-sm">
-              {NAV.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="rounded-md px-3 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+
+        {/* Masthead — two stacked rows, solid paper (no blur), crisp rule below. */}
+        <header className="sticky top-0 z-40 border-b-2 border-[var(--rule)] bg-background">
+          <div className="mx-auto max-w-6xl px-6 lg:px-10">
+            <div className="flex items-center justify-between gap-4 border-b border-border py-2.5 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+              <span>Free Templates — Issue Nº 01</span>
+              <span className="hidden sm:inline">Next.js 16 · Convex</span>
+              <span className="hidden md:inline">free-template.rahmanef.com</span>
+            </div>
+            <nav className="flex h-16 items-center justify-between">
+              <Link
+                href="/"
+                className="flex items-baseline gap-1.5 font-display text-xl tracking-tight"
+              >
+                <span className="align-super text-xs text-primary">Nº</span>
+                <span>Free Templates</span>
+              </Link>
+              <ul className="flex items-center gap-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground sm:gap-6">
+                {NAV.map((item) => (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="pb-1 transition-colors hover:border-b-2 hover:border-primary hover:text-foreground"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
         </header>
 
-        <main id="main" className="flex-1">{children}</main>
+        <main id="main" className="flex-1">
+          {children}
+        </main>
 
-        <footer className="border-t border-border">
-          <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-10 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-            <div className="flex items-center gap-2 text-sm font-medium">
-              <span className="grid h-6 w-6 place-items-center rounded-md bg-primary text-primary-foreground text-xs font-bold">
-                P
-              </span>
-              Templates Portal
+        {/* Colophon footer — ink, rules, one vermilion for hover underlines. */}
+        <footer className="border-t-2 border-[var(--rule)] bg-muted/40">
+          <div className="mx-auto max-w-6xl px-6 py-14 lg:px-10">
+            <div className="grid gap-10 sm:grid-cols-[1.4fr_1fr_1fr] sm:gap-8">
+              <div>
+                <p className="font-display text-3xl italic leading-none tracking-tight">
+                  Free Templates
+                </p>
+                <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+                  A free, open index of production Next.js + Convex templates.
+                  Clone, brand, ship.
+                </p>
+              </div>
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">
+                  Navigate
+                </p>
+                <ul className="mt-4 space-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  {NAV.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className="transition-colors hover:text-foreground"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">
+                  Maker
+                </p>
+                <ul className="mt-4 space-y-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <li>
+                    <a href={MAKER.site} className="transition-colors hover:text-foreground">
+                      rahmanef.com ↗
+                    </a>
+                  </li>
+                  <li>
+                    <a href={MAKER.github} className="transition-colors hover:text-foreground">
+                      github.com/{MAKER.handle} ↗
+                    </a>
+                  </li>
+                  <li>
+                    <a href={MAKER.resources} className="transition-colors hover:text-foreground">
+                      resource.rahmanef.com ↗
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
-              {NAV.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="transition-colors hover:text-foreground"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <p className="text-xs text-muted-foreground">
-              © {new Date().getFullYear()} Templates Portal. Stateless, client-side only.
+            <p className="mt-12 border-t border-border pt-6 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              Set in Fraunces, Hanken Grotesk &amp; IBM Plex Mono · © {year}{" "}
+              {MAKER.name} · Stateless, client-side only.
             </p>
           </div>
         </footer>
