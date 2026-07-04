@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-// Generated favicon — Geist triangle mark, matching the header wordmark.
+// Generated favicon — "F" mark in the Geist blue accent on near-black.
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
@@ -15,11 +15,13 @@ export default function Icon() {
           alignItems: "center",
           justifyContent: "center",
           background: "#000000",
-          color: "#ffffff",
-          fontSize: 22,
+          color: "#52a8ff",
+          fontFamily: "Georgia, serif",
+          fontSize: 24,
+          fontWeight: 600,
         }}
       >
-        ▲
+        F
       </div>
     ),
     { ...size },

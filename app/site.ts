@@ -18,3 +18,7 @@ export const MAKER = {
   email: "rahmanef63@gmail.com",
   role: "Full-stack builder · Next.js + Convex",
 } as const;
+
+// The original vibe-coding tutorial thread + the AI coder we point people to.
+export const TUTORIAL_URL = "https://www.threads.com/@rahmanef_/post/DZHUirjk-Oh";
+export const JULES_URL = "https://jules.google.com/";

@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 import { SITE_NAME } from "./site";
 
-// File-based OG image — Geist dark aesthetic (near-black, one blue accent).
-// Satori-safe: every multi-child element is display:flex; leaves are single text.
+// File-based OG image — editorial masthead, recolored to the Geist palette
+// (near-black + one blue accent). Satori-safe: multi-child elements are flex.
 export const alt = SITE_NAME;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -11,6 +11,7 @@ const BG = "#000000";
 const INK = "#ededed";
 const ACCENT = "#52a8ff";
 const MUTED = "#a0a0a0";
+const RULE = "#454545";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -21,46 +22,55 @@ export default function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          padding: "84px",
+          padding: "72px 84px",
           background: BG,
           color: INK,
-          fontFamily: "sans-serif",
+          fontFamily: "Georgia, serif",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 40 }}>
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 8,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              background: INK,
-              color: BG,
-              fontSize: 24,
-            }}
-          >
-            ▲
-          </div>
-          <div style={{ display: "flex", fontSize: 26, color: MUTED }}>{SITE_NAME}</div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            borderBottom: `2px solid ${RULE}`,
+            paddingBottom: 20,
+            fontFamily: "monospace",
+            fontSize: 22,
+            letterSpacing: 4,
+            color: MUTED,
+          }}
+        >
+          <div style={{ display: "flex" }}>FREE TEMPLATES — ISSUE Nº 01</div>
+          <div style={{ display: "flex", color: ACCENT }}>THE CURATED INDEX</div>
         </div>
+
         <div
           style={{
             display: "flex",
             flexWrap: "wrap",
-            fontSize: 74,
-            fontWeight: 600,
-            letterSpacing: -3,
-            lineHeight: 1.05,
+            marginTop: "auto",
+            fontSize: 88,
+            fontWeight: 500,
+            lineHeight: 1.02,
+            letterSpacing: -2,
             maxWidth: 1000,
           }}
         >
           Production templates you clone, brand &amp;&nbsp;
-          <span style={{ display: "flex", color: ACCENT }}>ship.</span>
+          <span style={{ display: "flex", fontStyle: "italic", color: ACCENT }}>ship.</span>
         </div>
-        <div style={{ display: "flex", fontSize: 26, color: MUTED, marginTop: 28, maxWidth: 940 }}>
+
+        <div
+          style={{
+            display: "flex",
+            marginTop: 28,
+            fontFamily: "monospace",
+            fontSize: 24,
+            letterSpacing: 1,
+            color: MUTED,
+            maxWidth: 960,
+          }}
+        >
           7 Next.js 16 + Convex templates · one Brand Kit · by Rahman Fakhrul
         </div>
       </div>

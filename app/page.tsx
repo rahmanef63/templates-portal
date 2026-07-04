@@ -1,9 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ArrowUpRight, Check } from "@phosphor-icons/react/dist/ssr";
-import { SITE_URL, SITE_NAME } from "./site";
+import type { CSSProperties } from "react";
+import { ArrowRight, ArrowUpRight, GithubLogo, Sparkle } from "@phosphor-icons/react/dist/ssr";
+import { SITE_URL, SITE_NAME, TUTORIAL_URL, JULES_URL } from "./site";
 import { getLang, getDict } from "./dictionaries";
 import { getTemplates, getSettings } from "@/lib/content";
+
+const delay = (i: number) => ({ "--i": i }) as CSSProperties;
 
 export default async function HomePage() {
   const t = getDict(await getLang());
@@ -35,176 +38,270 @@ export default async function HomePage() {
       />
 
       {/* HERO */}
-      <section className="border-b border-border">
-        <div className="mx-auto grid max-w-[1200px] items-center gap-12 px-5 pt-16 pb-14 sm:pt-20 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:px-8 lg:pt-24">
-          <div>
-            <p className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-muted px-3 py-1 text-[13px] text-muted-foreground">
-              <span className="size-1.5 rounded-full bg-accent" />
-              {t.hero.eyebrow} · {templates.length}
-            </p>
-            <h1 className="text-[clamp(2.5rem,6vw,4rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
-              {t.hero.title1} <span className="text-accent">{t.hero.accent}</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-              {t.hero.standfirst(templates.length)}
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a
-                href="#index"
-                className="inline-flex h-11 items-center gap-1.5 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
+      <section className="border-b-2 border-[var(--rule)]">
+        <div className="mx-auto max-w-6xl px-6 lg:px-10">
+          <div className="grid gap-10 pt-14 pb-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pt-20 lg:pb-24">
+            <div className="flex flex-col">
+              <p className="load-in font-mono text-xs uppercase tracking-[0.28em] text-primary" style={delay(0)}>
+                {t.hero.eyebrow}
+              </p>
+              <h1
+                className="load-in mt-6 break-words font-display font-normal leading-[1.02] tracking-[-0.02em] text-foreground text-[clamp(2rem,7.5vw,5.25rem)] sm:leading-[0.98]"
+                style={delay(1)}
               >
-                {t.hero.cta1}
-                <ArrowRight weight="bold" className="size-4" />
-              </a>
-              <Link
-                href="/brand-kit"
-                className="inline-flex h-11 items-center gap-1.5 rounded-md border border-border-strong bg-background px-5 text-sm font-medium transition hover:bg-muted"
+                {t.hero.title1}{" "}
+                <em className="font-normal italic text-primary">{t.hero.accent}</em>
+              </h1>
+              <p
+                className="load-in mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground sm:text-xl"
+                style={delay(2)}
               >
-                {t.hero.cta2}
-              </Link>
+                {t.hero.standfirst(templates.length)}
+              </p>
+              <div className="load-in mt-10 flex flex-wrap items-center gap-x-6 gap-y-4" style={delay(3)}>
+                <a
+                  href="#index"
+                  className="inline-flex items-center gap-2 bg-primary px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-foreground transition-transform hover:-translate-y-0.5"
+                >
+                  {t.hero.cta1}
+                  <ArrowRight weight="bold" className="size-4" />
+                </a>
+                <Link
+                  href="/brand-kit"
+                  className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-foreground"
+                >
+                  <span className="border-b border-primary pb-1">{t.hero.cta2}</span>
+                  <ArrowUpRight
+                    weight="bold"
+                    className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  />
+                </Link>
+              </div>
             </div>
-          </div>
 
-          <div className="relative hidden lg:block">
-            <div className="overflow-hidden rounded-xl border border-border bg-muted shadow-[var(--shadow-card)]">
-              <Image
-                src={lead.thumb}
-                alt={`${lead.title} preview`}
-                width={1600}
-                height={840}
-                priority
-                className="w-full"
-              />
-            </div>
-            <div className="mt-2.5 flex items-center justify-between px-1 text-[13px] text-faint">
-              <span>{lead.vertical}</span>
-              <a href={lead.demo} className="text-accent hover:underline">
-                {t.hero.liveDemo} ↗
-              </a>
-            </div>
+            <figure className="load-in relative hidden self-end lg:block" style={delay(4)}>
+              <div className="overflow-hidden border border-[var(--rule)] bg-muted">
+                <Image
+                  src={lead.thumb}
+                  alt={`${lead.title} preview`}
+                  width={1600}
+                  height={840}
+                  priority
+                  className="w-full grayscale-[0.15] contrast-[1.02]"
+                />
+              </div>
+              <figcaption className="mt-3 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                <span>
+                  {t.hero.fig} — {lead.vertical}
+                </span>
+                <a href={lead.demo} className="text-primary">
+                  {t.hero.liveDemo} ↗
+                </a>
+              </figcaption>
+            </figure>
           </div>
         </div>
       </section>
 
-      {/* GALLERY */}
-      <section id="index" className="mx-auto max-w-[1200px] px-5 py-16 lg:px-8 lg:py-20">
-        <div className="mb-8 flex flex-col gap-2">
-          <h2 className="text-[clamp(1.75rem,3vw,2.25rem)] font-semibold tracking-[-0.02em]">
-            {t.index.title}
-          </h2>
-          <p className="max-w-2xl text-muted-foreground">{t.index.aside}</p>
+      {/* THE INDEX */}
+      <section id="index" className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-24">
+        <div className="flex flex-col gap-3 border-t-2 border-[var(--rule)] pt-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-primary">
+              {t.index.eyebrow(templates.length)}
+            </p>
+            <h2 className="mt-3 font-display text-3xl tracking-[-0.01em] sm:text-4xl">
+              {t.index.title}
+            </h2>
+          </div>
+          <p className="max-w-sm font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-muted-foreground">
+            {t.index.aside}
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="index-list mt-8">
           {templates.map((tpl) => (
             <Link
               key={tpl.slug}
               href={`/t/${tpl.slug}`}
-              className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background shadow-[var(--shadow-card)] transition hover:border-border-strong"
+              className="index-row reveal group grid grid-cols-[auto_1fr] items-start gap-x-6 gap-y-5 border-t border-border py-8 transition-[padding] duration-300 hover:pl-3 sm:grid-cols-[auto_1fr_auto] sm:gap-x-10 sm:py-10"
             >
-              <div className="relative aspect-[40/21] w-full overflow-hidden border-b border-border bg-muted">
-                <Image
-                  src={tpl.thumb}
-                  alt={`${tpl.title} preview`}
-                  fill
-                  sizes="(min-width:1024px) 380px, (min-width:640px) 50vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="flex flex-1 flex-col p-5">
-                <h3 className="text-[15px] font-semibold tracking-[-0.01em]">{tpl.title}</h3>
-                <p className="mt-0.5 text-[13px] text-faint">{tpl.vertical}</p>
-                <ul className="mt-3 flex flex-wrap gap-1.5">
+              <span className="index-num font-display text-4xl italic leading-none text-muted-foreground transition-colors group-hover:text-primary sm:text-6xl" />
+
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                  <h3 className="font-display text-2xl font-medium tracking-[-0.01em] text-foreground sm:text-4xl">
+                    {tpl.title}
+                  </h3>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                    {tpl.vertical}
+                  </span>
+                </div>
+                <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                   {tpl.features.slice(0, 3).map((f) => (
-                    <li
-                      key={f}
-                      className="rounded-md border border-border bg-muted px-2 py-0.5 text-[12px] text-muted-foreground"
-                    >
+                    <li key={f} className="before:mr-2 before:text-primary before:content-['/']">
                       {f}
                     </li>
                   ))}
                 </ul>
-                <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-medium text-accent">
+                <span className="mt-5 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
                   {t.index.readEntry}
-                  <ArrowRight
-                    weight="bold"
-                    className="size-3.5 transition group-hover:translate-x-0.5"
-                  />
+                  <ArrowRight weight="bold" className="size-3.5 transition-transform group-hover:translate-x-1" />
                 </span>
               </div>
+
+              <figure className="plate col-span-2 overflow-hidden border border-border bg-muted sm:col-span-1 sm:w-64">
+                <div className="relative aspect-[40/21]">
+                  <Image
+                    src={tpl.thumb}
+                    alt={`${tpl.title} preview`}
+                    fill
+                    sizes="(min-width:640px) 256px, 100vw"
+                    className="object-cover grayscale transition-all duration-500 group-hover:scale-[1.03] group-hover:grayscale-0"
+                  />
+                </div>
+              </figure>
             </Link>
           ))}
         </div>
       </section>
 
       {/* TOOLKIT */}
-      <section className="border-t border-border bg-background-subtle">
-        <div className="mx-auto grid max-w-[1200px] gap-5 px-5 py-16 sm:grid-cols-2 lg:px-8 lg:py-20">
-          <div className="flex flex-col rounded-xl border border-border bg-background p-8 shadow-[var(--shadow-card)]">
-            <h3 className="text-xl font-semibold tracking-[-0.01em]">{t.toolkit.brandKitTitle}</h3>
-            <p className="mt-3 flex-1 leading-relaxed text-muted-foreground">
-              {t.toolkit.brandKitBody}
-            </p>
-            <Link
-              href="/brand-kit"
-              className="mt-6 inline-flex h-10 w-fit items-center gap-1.5 rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground transition hover:opacity-90"
-            >
-              {t.toolkit.brandKitCta}
-              <ArrowRight weight="bold" className="size-4" />
-            </Link>
-          </div>
-          <div className="flex flex-col rounded-xl border border-border bg-background p-8 shadow-[var(--shadow-card)]">
-            <h3 className="text-xl font-semibold tracking-[-0.01em]">{t.toolkit.setupTitle}</h3>
-            <p className="mt-3 flex-1 leading-relaxed text-muted-foreground">
-              {t.toolkit.setupBody}
-            </p>
-            <Link
-              href="/docs/setup"
-              className="mt-6 inline-flex h-10 w-fit items-center gap-1.5 rounded-md border border-border-strong bg-background px-4 text-sm font-medium transition hover:bg-muted"
-            >
-              {t.toolkit.setupCta}
-            </Link>
+      <section className="border-t-2 border-[var(--rule)] bg-muted/30">
+        <div className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-24">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-primary">
+            {t.toolkit.eyebrow}
+          </p>
+          <div className="mt-8 grid gap-px overflow-hidden border border-border bg-border sm:grid-cols-2">
+            <div className="flex flex-col bg-background p-8 lg:p-10">
+              <h3 className="font-display text-2xl tracking-[-0.01em] sm:text-3xl">
+                {t.toolkit.brandKitTitle}
+              </h3>
+              <p className="mt-4 flex-1 leading-relaxed text-muted-foreground">
+                {t.toolkit.brandKitBody}
+              </p>
+              <Link
+                href="/brand-kit"
+                className="mt-8 inline-flex w-fit items-center gap-2 bg-primary px-5 py-3 font-mono text-[11px] uppercase tracking-[0.18em] text-primary-foreground transition-transform hover:-translate-y-0.5"
+              >
+                {t.toolkit.brandKitCta}
+                <ArrowRight weight="bold" className="size-4" />
+              </Link>
+            </div>
+            <div className="flex flex-col bg-background p-8 lg:p-10">
+              <h3 className="font-display text-2xl tracking-[-0.01em] sm:text-3xl">
+                {t.toolkit.setupTitle}
+              </h3>
+              <p className="mt-4 flex-1 leading-relaxed text-muted-foreground">
+                {t.toolkit.setupBody}
+              </p>
+              <Link
+                href="/docs/setup"
+                className="group mt-8 inline-flex w-fit items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground"
+              >
+                <span className="border-b border-primary pb-1">{t.toolkit.setupCta}</span>
+                <ArrowUpRight
+                  weight="bold"
+                  className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* MAKER */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-[1200px] px-5 py-16 lg:px-8 lg:py-20">
-          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      {/* VIBE-CODE IT — connect the repo to an AI coder */}
+      <section className="border-t-2 border-[var(--rule)]">
+        <div className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-24">
+          <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
             <div>
-              <div className="flex items-center gap-3">
-                <span className="grid size-11 place-items-center rounded-full bg-primary text-lg font-semibold text-primary-foreground">
-                  {s.makerName.charAt(0)}
+              <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-primary">
+                {t.vibe.eyebrow}
+              </p>
+              <h2 className="mt-3 font-display text-3xl leading-[1.05] tracking-[-0.02em] sm:text-4xl">
+                {t.vibe.title}
+              </h2>
+              <div className="mt-8 flex flex-wrap gap-2.5">
+                <a
+                  href={JULES_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-border-strong px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.16em] transition-colors hover:border-primary hover:text-primary"
+                >
+                  <Sparkle weight="fill" className="size-3.5 text-primary" />
+                  {t.vibe.julesLabel} ↗
+                </a>
+                <span className="inline-flex items-center gap-2 border border-border px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <GithubLogo weight="bold" className="size-3.5" />
+                  {t.vibe.coderLabel}
                 </span>
-                <div>
-                  <h2 className="text-lg font-semibold tracking-[-0.01em]">{s.makerName}</h2>
-                  <p className="text-[13px] text-faint">{s.makerRole}</p>
-                </div>
               </div>
-              <dl className="mt-6 space-y-2.5 text-sm">
-                {[
-                  [t.colophon.portfolio, s.makerSite, "rahmanef.com"],
-                  [t.colophon.source, s.makerGithub, `github.com/${s.makerHandle}`],
-                  [t.colophon.knowledge, s.makerResources, "resource.rahmanef.com"],
-                ].map(([label, href, text]) => (
-                  <div key={label} className="flex items-center justify-between gap-4">
-                    <dt className="text-faint">{label}</dt>
-                    <dd>
-                      <a href={href} className="text-accent hover:underline">
-                        {text} ↗
-                      </a>
-                    </dd>
-                  </div>
-                ))}
+            </div>
+            <div className="lg:border-l lg:border-border lg:pl-20">
+              <p className="text-lg leading-relaxed text-muted-foreground">{t.vibe.body}</p>
+              <p className="mt-6 border-l-2 border-primary bg-muted/40 py-3 pl-4 pr-3 text-sm leading-relaxed">
+                {t.vibe.tip}
+              </p>
+              <a
+                href={TUTORIAL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-6 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-primary"
+              >
+                <span className="border-b border-primary pb-1">{t.vibe.tutorial}</span>
+                <ArrowUpRight weight="bold" className="size-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* COLOPHON — the maker */}
+      <section className="border-t-2 border-[var(--rule)]">
+        <div className="mx-auto max-w-6xl px-6 py-20 lg:px-10 lg:py-28">
+          <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-primary">
+            {t.colophon.eyebrow}
+          </p>
+          <div className="mt-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+            <div>
+              <h2 className="font-display text-4xl leading-[1.05] tracking-[-0.02em] sm:text-5xl">
+                {t.colophon.builtBy} <span className="italic text-primary">{s.makerName}</span>
+              </h2>
+              <p className="mt-5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                {t.colophon.role}
+              </p>
+              <dl className="mt-10 space-y-4 border-t border-border pt-6 font-mono text-xs uppercase tracking-[0.14em]">
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">{t.colophon.portfolio}</dt>
+                  <dd>
+                    <a href={s.makerSite} className="border-b border-primary pb-0.5 hover:text-primary">
+                      rahmanef.com ↗
+                    </a>
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">{t.colophon.source}</dt>
+                  <dd>
+                    <a href={s.makerGithub} className="border-b border-primary pb-0.5 hover:text-primary">
+                      github.com/{s.makerHandle} ↗
+                    </a>
+                  </dd>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">{t.colophon.knowledge}</dt>
+                  <dd>
+                    <a href={s.makerResources} className="border-b border-primary pb-0.5 hover:text-primary">
+                      resource.rahmanef.com ↗
+                    </a>
+                  </dd>
+                </div>
               </dl>
             </div>
-            <div className="lg:border-l lg:border-border lg:pl-16">
-              <p className="text-2xl font-medium leading-[1.5] tracking-[-0.01em]">
+            <div className="lg:border-l lg:border-border lg:pl-20">
+              <p className="font-display text-2xl leading-[1.5] text-foreground first-letter:float-left first-letter:mr-3 first-letter:mt-1 first-letter:text-7xl first-letter:font-medium first-letter:leading-[0.7] first-letter:text-primary sm:text-[1.7rem]">
                 {t.colophon.bio}
               </p>
-              <p className="mt-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                <Check weight="bold" className="size-4 text-accent" />
+              <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 {t.colophon.byline}
               </p>
             </div>

@@ -62,6 +62,15 @@ type Dict = {
     ships: string;
     fig: string;
   };
+  vibe: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    tip: string;
+    julesLabel: string;
+    coderLabel: string;
+    tutorial: string;
+  };
 };
 
 const pad = (n: number) => String(n).padStart(2, "0");
@@ -114,7 +123,7 @@ const en: Dict = {
     navigate: "Navigate",
     maker: "Maker",
     colophon: (year, name) =>
-      `Built with Geist Sans & Geist Mono · © ${year} ${name} · Free & open templates.`,
+      `Set in Fraunces, Hanken Grotesk & IBM Plex Mono · © ${year} ${name} · Free & open templates.`,
   },
   detail: {
     all: "All templates",
@@ -122,6 +131,15 @@ const en: Dict = {
     getRepo: "Get the repo",
     ships: "What it ships",
     fig: "Fig.",
+  },
+  vibe: {
+    eyebrow: "Vibe-code it",
+    title: "Make it yours with an AI coder",
+    body: "Every template is a live GitHub repo. Connect it to an AI coding agent that can push commits — Google Jules, or any repo-aware vibe coder — and redesign or extend it in plain language, no local setup.",
+    tip: 'One rule: tell the AI "don’t touch the CRUD" so your admin panel and data stay intact.',
+    julesLabel: "Google Jules",
+    coderLabel: "GPT / Claude / Gemini on GitHub",
+    tutorial: "Full walkthrough on Threads",
   },
 };
 
@@ -173,7 +191,7 @@ const id: Dict = {
     navigate: "Navigasi",
     maker: "Pembuat",
     colophon: (year, name) =>
-      `Dibuat dengan Geist Sans & Geist Mono · © ${year} ${name} · Template gratis & terbuka.`,
+      `Diset dengan Fraunces, Hanken Grotesk & IBM Plex Mono · © ${year} ${name} · Template gratis & terbuka.`,
   },
   detail: {
     all: "Semua template",
@@ -181,6 +199,15 @@ const id: Dict = {
     getRepo: "Ambil repo",
     ships: "Yang disertakan",
     fig: "Gbr.",
+  },
+  vibe: {
+    eyebrow: "Vibe-coding",
+    title: "Jadikan milikmu dengan AI coder",
+    body: "Setiap template adalah repo GitHub yang hidup. Hubungkan ke agen AI yang bisa push commit — Google Jules, atau vibe coder lain yang paham repo — lalu ubah desain atau tambah fitur cukup dengan bahasa biasa, tanpa setup lokal.",
+    tip: 'Satu aturan: bilang ke AI "jangan sentuh CRUD-nya" biar panel admin dan datamu tetap aman.',
+    julesLabel: "Google Jules",
+    coderLabel: "GPT / Claude / Gemini di GitHub",
+    tutorial: "Panduan lengkap di Threads",
   },
 };
 

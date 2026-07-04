@@ -8,3 +8,8 @@ dist
 next-env.d.ts
 .vercel
 .DS_Store
+
+# Added by si-coder deploy (secret-leak guard)
+.env
+.env.*
+!.env.example

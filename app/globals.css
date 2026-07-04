@@ -1,69 +1,52 @@
 @import "tailwindcss";
 
-/* Vercel Geist design system. Two themes (light default, dark via prefers or an
-   explicit [data-theme]). Semantic tokens map to Geist steps; `accent` is Geist
-   blue (links/focus/state), `primary` is the neutral high-contrast fill Geist
-   uses for the single most important action. */
+/* Expose the next/font variables as Tailwind v4 font utilities:
+   font-display (editorial serif) · font-sans (grotesk) · font-mono (labels). */
 @theme {
+  --font-display: var(--font-display), "Iowan Old Style", Georgia, serif;
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
 }
 
+/* The Index — same editorial layout as before, RECOLORED to the Vercel Geist
+   palette: neutral grays + ONE blue accent (replaces the vermilion). Dark is
+   the default; a toggle stamps [data-theme="light"] for the Geist light theme. */
 :root {
-  color-scheme: light;
-  --background: #ffffff;        /* background-100 */
-  --background-subtle: #fafafa; /* background-200 */
-  --foreground: #171717;        /* gray-1000 primary text */
-  --muted: #f2f2f2;             /* gray-100 surface */
-  --muted-foreground: #4d4d4d;  /* gray-900 secondary text */
-  --faint: #8f8f8f;             /* gray-700 tertiary/metadata */
-  --border: #ebebeb;            /* gray-200 hairline */
-  --border-strong: #e0e0e0;
-  --primary: #171717;           /* neutral fill = most important action */
-  --primary-foreground: #ffffff;
-  --accent: #006bff;            /* blue-700 links / focus / state */
-  --accent-foreground: #ffffff;
-  --ring: #006bff;
-  --shadow-card: 0 2px 2px rgba(0, 0, 0, 0.04);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --background: #000000;
-    --background-subtle: #0a0a0a;
-    --foreground: #ededed;        /* gray-1000 */
-    --muted: #1a1a1a;             /* gray-100 */
-    --muted-foreground: #a0a0a0;  /* gray-900 */
-    --faint: #8f8f8f;             /* gray-700 */
-    --border: #2e2e2e;            /* gray-400 */
-    --border-strong: #454545;
-    --primary: #ededed;
-    --primary-foreground: #000000;
-    --accent: #52a8ff;            /* blue-900, readable on black */
-    --accent-foreground: #000000;
-    --ring: #52a8ff;
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
-  }
-}
-
-/* Explicit theme override (toggle stamps data-theme; wins over the media query). */
-:root[data-theme="dark"] {
   color-scheme: dark;
   --background: #000000;
   --background-subtle: #0a0a0a;
-  --foreground: #ededed;
-  --muted: #1a1a1a;
-  --muted-foreground: #a0a0a0;
-  --faint: #8f8f8f;
-  --border: #2e2e2e;
-  --border-strong: #454545;
-  --primary: #ededed;
+  --foreground: #ededed;        /* gray-1000 */
+  --muted: #1a1a1a;             /* gray-100 */
+  --muted-foreground: #a0a0a0;  /* gray-900 */
+  --faint: #8f8f8f;             /* gray-700 */
+  --border: #2e2e2e;            /* gray-400 */
+  --border-strong: #454545;     /* gray-500 */
+  --rule: #454545;              /* strong divider */
+  --primary: #52a8ff;           /* Geist blue — the only accent (text + fill) */
   --primary-foreground: #000000;
   --accent: #52a8ff;
   --accent-foreground: #000000;
   --ring: #52a8ff;
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --background: #ffffff;
+  --background-subtle: #fafafa;
+  --foreground: #171717;        /* gray-1000 */
+  --muted: #f2f2f2;             /* gray-100 */
+  --muted-foreground: #4d4d4d;  /* gray-900 */
+  --faint: #8f8f8f;             /* gray-700 */
+  --border: #ebebeb;            /* gray-200 */
+  --border-strong: #e0e0e0;
+  --rule: #d4d4d4;
+  --primary: #006bff;           /* blue-700 */
+  --primary-foreground: #ffffff;
+  --accent: #006bff;
+  --accent-foreground: #ffffff;
+  --ring: #006bff;
+  --shadow-card: 0 2px 2px rgba(0, 0, 0, 0.04);
 }
 
 @theme inline {
@@ -86,23 +69,70 @@
   border-color: var(--border);
 }
 
+html {
+  overflow-x: hidden;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  /* Geist heading rhythm: tight tracking on large type is applied per-element. */
+  overflow-x: hidden;
 }
 
 ::selection {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
 
-/* Geist two-layer focus ring: 2px surface gap, then a 2px blue ring. */
+/* Barely-there grain — fixed so it reads as stock, not scroll. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Visible keyboard focus — accent, offset so it clears the surface. */
 :where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
-  border-radius: 6px;
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* The Index: magazine table-of-contents numerals via pure CSS counters. */
+.index-list { counter-reset: idx -1; }
+.index-row { counter-increment: idx; }
+.index-num::before { content: counter(idx, decimal-leading-zero); }
+
+/* On touch (no hover), plates never develop — show them in full color. */
+@media (hover: none) {
+  .plate img { filter: none !important; }
+}
+
+@keyframes load-in {
+  from { opacity: 0; transform: translateY(14px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes reveal-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .load-in {
+    animation: load-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--i, 0) * 110ms);
+  }
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 26%;
+    }
+  }
 }
