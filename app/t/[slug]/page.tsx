@@ -2,24 +2,15 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  ArrowLeft,
-  ArrowUpRight,
-  GithubLogo,
-  Check,
-} from "@phosphor-icons/react/dist/ssr";
-import { TEMPLATES } from "@/data/templates";
+import { ArrowLeft, ArrowUpRight, GithubLogo, Check } from "@phosphor-icons/react/dist/ssr";
+import { getTemplates } from "@/lib/content";
 import { getLang, getDict } from "../../dictionaries";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return TEMPLATES.map((t) => ({ slug: t.slug }));
-}
-
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const t = TEMPLATES.find((x) => x.slug === slug);
+  const t = (await getTemplates()).find((x) => x.slug === slug);
   if (!t) return {};
   return {
     title: t.title,
@@ -30,26 +21,24 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
 export default async function TemplateDetail({ params }: Params) {
   const { slug } = await params;
-  const t = TEMPLATES.find((x) => x.slug === slug);
+  const t = (await getTemplates()).find((x) => x.slug === slug);
   if (!t) notFound();
   const d = getDict(await getLang()).detail;
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+    <div className="mx-auto max-w-[1200px] px-5 py-12 lg:px-8 lg:py-16">
       <Link
         href="/#index"
-        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition hover:text-foreground"
       >
         <ArrowLeft weight="bold" className="size-4" />
         {d.all}
       </Link>
 
-      <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-14">
+      <div className="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-14">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-wider text-primary">
-            {t.vertical}
-          </p>
-          <h1 className="mt-3 font-display text-4xl font-medium tracking-[-0.02em] sm:text-6xl">
+          <p className="text-[13px] text-faint">{t.vertical}</p>
+          <h1 className="mt-2 text-[clamp(2.25rem,5vw,3.25rem)] font-semibold leading-[1.05] tracking-[-0.03em]">
             {t.title}
           </h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
@@ -62,7 +51,7 @@ export default async function TemplateDetail({ params }: Params) {
                 href={t.demo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-primary px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-foreground transition-transform hover:-translate-y-0.5"
+                className="inline-flex h-11 items-center gap-1.5 rounded-md bg-primary px-5 text-sm font-medium text-primary-foreground transition hover:opacity-90"
               >
                 {d.liveDemo}
                 <ArrowUpRight weight="bold" className="size-4" />
@@ -73,45 +62,35 @@ export default async function TemplateDetail({ params }: Params) {
                 href={t.repo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-2 border-b border-primary pb-1 font-mono text-xs uppercase tracking-[0.18em] text-foreground"
+                className="inline-flex h-11 items-center gap-1.5 rounded-md border border-border-strong bg-background px-5 text-sm font-medium transition hover:bg-muted"
               >
-                <GithubLogo weight="bold" className="size-4 text-primary" />
+                <GithubLogo weight="bold" className="size-4" />
                 {d.getRepo}
               </a>
             ) : null}
           </div>
 
-          <h2 className="mt-14 border-t border-border pt-6 text-xs font-mono uppercase tracking-[0.22em] text-primary">
-            {d.ships}
-          </h2>
+          <h2 className="mt-12 text-[13px] font-medium text-muted-foreground">{d.ships}</h2>
           <ul className="mt-4 grid gap-x-6 gap-y-3 sm:grid-cols-2">
             {t.features.map((f) => (
               <li key={f} className="flex items-start gap-2.5 text-sm">
-                <Check
-                  weight="bold"
-                  className="mt-0.5 size-4 shrink-0 text-primary"
-                />
+                <Check weight="bold" className="mt-0.5 size-4 shrink-0 text-accent" />
                 {f}
               </li>
             ))}
           </ul>
         </div>
 
-        <figure className="lg:sticky lg:top-28">
-          <div className="overflow-hidden border border-[var(--rule)] bg-muted">
-            <Image
-              src={t.thumb}
-              alt={`${t.title} preview`}
-              width={1600}
-              height={840}
-              priority
-              className="w-full contrast-[1.02]"
-            />
-          </div>
-          <figcaption className="mt-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-            {d.fig} — {t.vertical}
-          </figcaption>
-        </figure>
+        <div className="overflow-hidden rounded-xl border border-border bg-muted shadow-[var(--shadow-card)] lg:sticky lg:top-24">
+          <Image
+            src={t.thumb}
+            alt={`${t.title} preview`}
+            width={1600}
+            height={840}
+            priority
+            className="w-full"
+          />
+        </div>
       </div>
     </div>
   );

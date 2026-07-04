@@ -114,7 +114,7 @@ const en: Dict = {
     navigate: "Navigate",
     maker: "Maker",
     colophon: (year, name) =>
-      `Set in Fraunces, Hanken Grotesk & IBM Plex Mono · © ${year} ${name} · Stateless, client-side only.`,
+      `Built with Geist Sans & Geist Mono · © ${year} ${name} · Free & open templates.`,
   },
   detail: {
     all: "All templates",
@@ -173,7 +173,7 @@ const id: Dict = {
     navigate: "Navigasi",
     maker: "Pembuat",
     colophon: (year, name) =>
-      `Diset dengan Fraunces, Hanken Grotesk & IBM Plex Mono · © ${year} ${name} · Stateless, hanya sisi klien.`,
+      `Dibuat dengan Geist Sans & Geist Mono · © ${year} ${name} · Template gratis & terbuka.`,
   },
   detail: {
     all: "Semua template",

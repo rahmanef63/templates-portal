@@ -1,19 +1,16 @@
 import { ImageResponse } from "next/og";
 import { SITE_NAME } from "./site";
 
-// File-based OG image — Next auto-applies it as og:image + twitter:image for
-// every route. Editorial "ink & vermilion" (dark) masthead to match the site.
-// Satori-safe styles only (every multi-child element is display:flex; leaves
-// are single text; Georgia serif + monospace are built-in fallbacks).
+// File-based OG image — Geist dark aesthetic (near-black, one blue accent).
+// Satori-safe: every multi-child element is display:flex; leaves are single text.
 export const alt = SITE_NAME;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const PAPER = "#171310"; // warm near-black stock
-const INK = "#EDE9E3"; // warm off-white ink
-const VERMILION = "#EF5A3D";
-const MUTED = "#A69C90";
-const RULE = "#7D7468";
+const BG = "#000000";
+const INK = "#ededed";
+const ACCENT = "#52a8ff";
+const MUTED = "#a0a0a0";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -24,60 +21,46 @@ export default function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          padding: "72px 84px",
-          background: PAPER,
+          justifyContent: "center",
+          padding: "84px",
+          background: BG,
           color: INK,
-          fontFamily: "Georgia, serif",
+          fontFamily: "sans-serif",
         }}
       >
-        {/* dateline */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            borderBottom: `2px solid ${RULE}`,
-            paddingBottom: 20,
-            fontFamily: "monospace",
-            fontSize: 22,
-            letterSpacing: 4,
-            color: MUTED,
-          }}
-        >
-          <div style={{ display: "flex" }}>FREE TEMPLATES — ISSUE Nº 01</div>
-          <div style={{ display: "flex", color: VERMILION }}>THE CURATED INDEX</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 40 }}>
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 8,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: INK,
+              color: BG,
+              fontSize: 24,
+            }}
+          >
+            ▲
+          </div>
+          <div style={{ display: "flex", fontSize: 26, color: MUTED }}>{SITE_NAME}</div>
         </div>
-
-        {/* headline */}
         <div
           style={{
             display: "flex",
             flexWrap: "wrap",
-            marginTop: "auto",
-            fontSize: 88,
-            fontWeight: 500,
-            lineHeight: 1.02,
-            letterSpacing: -2,
+            fontSize: 74,
+            fontWeight: 600,
+            letterSpacing: -3,
+            lineHeight: 1.05,
             maxWidth: 1000,
           }}
         >
           Production templates you clone, brand &amp;&nbsp;
-          <span style={{ display: "flex", fontStyle: "italic", color: VERMILION }}>
-            ship.
-          </span>
+          <span style={{ display: "flex", color: ACCENT }}>ship.</span>
         </div>
-
-        {/* subline */}
-        <div
-          style={{
-            display: "flex",
-            marginTop: 28,
-            fontFamily: "monospace",
-            fontSize: 24,
-            letterSpacing: 1,
-            color: MUTED,
-            maxWidth: 960,
-          }}
-        >
+        <div style={{ display: "flex", fontSize: 26, color: MUTED, marginTop: 28, maxWidth: 940 }}>
           7 Next.js 16 + Convex templates · one Brand Kit · by Rahman Fakhrul
         </div>
       </div>

@@ -11,7 +11,9 @@
     "thumbs": "python3 scripts/build-thumbs.py"
   },
   "dependencies": {
+    "@convex-dev/auth": "^0.0.84",
     "@phosphor-icons/react": "^2.1.10",
+    "convex": "^1.39.1",
     "next": "^16",
     "react": "^19",
     "react-dom": "^19"
