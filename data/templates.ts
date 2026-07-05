@@ -163,4 +163,22 @@ export const TEMPLATES: TemplateEntry[] = [
       "Contact form",
     ],
   },
+  {
+    slug: "convex-starter",
+    title: "Blank Project",
+    vertical: "Blank starter",
+    blurb:
+      "The bare foundation — Next.js 16 + Convex wired end to end: auth, a live dashboard, and auto-deploy on every build. Nothing opinionated. Clone it and build your idea on top.",
+    demo: "https://template-convex-starter.vercel.app",
+    repo: "https://github.com/rahmanef63/template-convex-starter",
+    thumb: "/thumbs/convex-starter.png",
+    features: [
+      "Convex Cloud wired",
+      "Auth (Password)",
+      "Live dashboard",
+      "Notes CRUD",
+      "Auto-deploy on build",
+      "Set 4 env vars",
+    ],
+  },
 ];

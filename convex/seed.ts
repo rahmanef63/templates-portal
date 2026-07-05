@@ -1,27 +1,28 @@
 import { mutation } from "./_generated/server";
 import { TEMPLATES } from "../data/templates";
 
-// Idempotent seed: fills templates + settings from the in-repo defaults the
-// first time only. Safe to run repeatedly (skips whatever already exists).
-// Run after deploy: `npx convex run seed:run`.
+// Idempotent, additive seed: inserts any template slug from the in-repo defaults
+// that isn't already in the table (existing rows + their admin edits untouched),
+// and settings once. Safe to run repeatedly. Run after deploy: `npx convex run seed:run`.
 export const run = mutation({
   args: {},
   handler: async (ctx) => {
-    if (!(await ctx.db.query("templates").first())) {
-      for (let i = 0; i < TEMPLATES.length; i++) {
-        const t = TEMPLATES[i];
-        await ctx.db.insert("templates", {
-          slug: t.slug,
-          title: t.title,
-          vertical: t.vertical,
-          blurb: t.blurb,
-          demo: t.demo,
-          repo: t.repo,
-          thumb: t.thumb,
-          features: t.features,
-          order: i,
-        });
-      }
+    const rows = await ctx.db.query("templates").collect();
+    const present = new Set(rows.map((t) => t.slug));
+    let order = rows.length ? Math.max(...rows.map((t) => t.order)) + 1 : 0;
+    for (const t of TEMPLATES) {
+      if (present.has(t.slug)) continue;
+      await ctx.db.insert("templates", {
+        slug: t.slug,
+        title: t.title,
+        vertical: t.vertical,
+        blurb: t.blurb,
+        demo: t.demo,
+        repo: t.repo,
+        thumb: t.thumb,
+        features: t.features,
+        order: order++,
+      });
     }
     if (!(await ctx.db.query("settings").first())) {
       await ctx.db.insert("settings", {
