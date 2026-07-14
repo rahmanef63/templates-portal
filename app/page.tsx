@@ -1,19 +1,14 @@
 import Link from "next/link";
-import Image from "next/image";
-import type { CSSProperties } from "react";
 import { ArrowRight, ArrowUpRight, GithubLogo, Sparkle } from "@phosphor-icons/react/dist/ssr";
 import { SITE_URL, SITE_NAME, TUTORIAL_URL, JULES_URL } from "./site";
 import { getLang, getDict } from "./dictionaries";
 import { getTemplates, getSettings } from "@/lib/content";
 import { TemplateIndex } from "@/components/template-index";
 
-const delay = (i: number) => ({ "--i": i }) as CSSProperties;
-
 export default async function HomePage() {
   const t = getDict(await getLang());
   const templates = await getTemplates();
   const s = await getSettings();
-  const lead = templates[0];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -38,73 +33,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* HERO */}
-      <section className="border-b-2 border-[var(--rule)]">
-        <div className="mx-auto max-w-6xl px-6 lg:px-10">
-          <div className="grid gap-10 pt-14 pb-16 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16 lg:pt-20 lg:pb-24">
-            <div className="flex flex-col">
-              <p className="load-in font-mono text-xs uppercase tracking-[0.28em] text-primary" style={delay(0)}>
-                {t.hero.eyebrow}
-              </p>
-              <h1
-                className="load-in mt-6 break-words font-display font-normal leading-[1.02] tracking-[-0.02em] text-foreground text-[clamp(2rem,7.5vw,5.25rem)] sm:leading-[0.98]"
-                style={delay(1)}
-              >
-                {t.hero.title1}{" "}
-                <em className="font-normal italic text-primary">{t.hero.accent}</em>
-              </h1>
-              <p
-                className="load-in mt-8 max-w-xl text-lg leading-relaxed text-muted-foreground sm:text-xl"
-                style={delay(2)}
-              >
-                {t.hero.standfirst(templates.length)}
-              </p>
-              <div className="load-in mt-10 flex flex-wrap items-center gap-x-6 gap-y-4" style={delay(3)}>
-                <a
-                  href="#index"
-                  className="inline-flex items-center gap-2 bg-primary px-6 py-3.5 font-mono text-xs font-medium uppercase tracking-[0.18em] text-primary-foreground transition-transform hover:-translate-y-0.5"
-                >
-                  {t.hero.cta1}
-                  <ArrowRight weight="bold" className="size-4" />
-                </a>
-                <Link
-                  href="/brand-kit"
-                  className="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.18em] text-foreground"
-                >
-                  <span className="border-b border-primary pb-1">{t.hero.cta2}</span>
-                  <ArrowUpRight
-                    weight="bold"
-                    className="size-4 text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  />
-                </Link>
-              </div>
-            </div>
-
-            <figure className="load-in relative hidden self-end lg:block" style={delay(4)}>
-              <div className="overflow-hidden border border-[var(--rule)] bg-muted">
-                <Image
-                  src={lead.thumb}
-                  alt={`${lead.title} preview`}
-                  width={1600}
-                  height={840}
-                  priority
-                  className="w-full grayscale-[0.15] contrast-[1.02]"
-                />
-              </div>
-              <figcaption className="mt-3 flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                <span>
-                  {t.hero.fig} — {lead.vertical}
-                </span>
-                <a href={lead.demo} className="text-primary">
-                  {t.hero.liveDemo} ↗
-                </a>
-              </figcaption>
-            </figure>
-          </div>
-        </div>
-      </section>
-
-      {/* THE INDEX */}
+      {/* THE INDEX — leads the page (no hero) */}
       <TemplateIndex
         templates={templates}
         labels={{
