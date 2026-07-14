@@ -29,6 +29,8 @@ type Dict = {
     title: string;
     aside: string;
     readEntry: string;
+    viewList: string;
+    viewGallery: string;
   };
   toolkit: {
     eyebrow: string;
@@ -95,6 +97,8 @@ const en: Dict = {
     aside:
       "Production-ready · one vertical each · open an entry for features, live demo & repo",
     readEntry: "Read the entry",
+    viewList: "List",
+    viewGallery: "Gallery",
   },
   toolkit: {
     eyebrow: "The Toolkit",
@@ -163,6 +167,8 @@ const id: Dict = {
     aside:
       "Siap produksi · satu vertikal tiap entri · buka entri untuk fitur, demo langsung & repo",
     readEntry: "Baca entri",
+    viewList: "Daftar",
+    viewGallery: "Galeri",
   },
   toolkit: {
     eyebrow: "Perkakas",

@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight, GithubLogo, Sparkle } from "@phosphor-icons/r
 import { SITE_URL, SITE_NAME, TUTORIAL_URL, JULES_URL } from "./site";
 import { getLang, getDict } from "./dictionaries";
 import { getTemplates, getSettings } from "@/lib/content";
+import { TemplateIndex } from "@/components/template-index";
 
 const delay = (i: number) => ({ "--i": i }) as CSSProperties;
 
@@ -104,67 +105,17 @@ export default async function HomePage() {
       </section>
 
       {/* THE INDEX */}
-      <section id="index" className="mx-auto max-w-6xl px-6 py-16 lg:px-10 lg:py-24">
-        <div className="flex flex-col gap-3 border-t-2 border-[var(--rule)] pt-6 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-primary">
-              {t.index.eyebrow(templates.length)}
-            </p>
-            <h2 className="mt-3 font-display text-3xl tracking-[-0.01em] sm:text-4xl">
-              {t.index.title}
-            </h2>
-          </div>
-          <p className="max-w-sm font-mono text-[11px] uppercase leading-relaxed tracking-[0.14em] text-muted-foreground">
-            {t.index.aside}
-          </p>
-        </div>
-
-        <div className="index-list mt-8">
-          {templates.map((tpl) => (
-            <Link
-              key={tpl.slug}
-              href={`/t/${tpl.slug}`}
-              className="index-row reveal group grid grid-cols-[auto_1fr] items-start gap-x-6 gap-y-5 border-t border-border py-8 transition-[padding] duration-300 hover:pl-3 sm:grid-cols-[auto_1fr_auto] sm:gap-x-10 sm:py-10"
-            >
-              <span className="index-num font-display text-4xl italic leading-none text-muted-foreground transition-colors group-hover:text-primary sm:text-6xl" />
-
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                  <h3 className="font-display text-2xl font-medium tracking-[-0.01em] text-foreground sm:text-4xl">
-                    {tpl.title}
-                  </h3>
-                  <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                    {tpl.vertical}
-                  </span>
-                </div>
-                <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                  {tpl.features.slice(0, 3).map((f) => (
-                    <li key={f} className="before:mr-2 before:text-primary before:content-['/']">
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <span className="mt-5 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-primary">
-                  {t.index.readEntry}
-                  <ArrowRight weight="bold" className="size-3.5 transition-transform group-hover:translate-x-1" />
-                </span>
-              </div>
-
-              <figure className="plate col-span-2 overflow-hidden border border-border bg-muted sm:col-span-1 sm:w-64">
-                <div className="relative aspect-[40/21]">
-                  <Image
-                    src={tpl.thumb}
-                    alt={`${tpl.title} preview`}
-                    fill
-                    sizes="(min-width:640px) 256px, 100vw"
-                    className="object-cover grayscale transition-all duration-500 group-hover:scale-[1.03] group-hover:grayscale-0"
-                  />
-                </div>
-              </figure>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <TemplateIndex
+        templates={templates}
+        labels={{
+          eyebrow: t.index.eyebrow(templates.length),
+          title: t.index.title,
+          aside: t.index.aside,
+          readEntry: t.index.readEntry,
+          viewList: t.index.viewList,
+          viewGallery: t.index.viewGallery,
+        }}
+      />
 
       {/* TOOLKIT */}
       <section className="border-t-2 border-[var(--rule)] bg-muted/30">
